@@ -1,0 +1,38 @@
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="brand" routerLink="/" aria-label="Luma home"
+    ><span class="brand-mark"><i></i><i></i><i></i></span>luma<span class="brand-dot">.</span></a
+  >
+  <nav class="desktop-nav" aria-label="Main navigation">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+      >Discover</a
+    >
+    <a routerLink="/movies" routerLinkActive="active">Movies</a>
+    <a routerLink="/series" routerLinkActive="active">TV Shows</a>
+    <a routerLink="/list" routerLinkActive="active"
+      >My List <span class="nav-count">{{ store.saved().length }}</span></a
+    >
+  </nav>
+  <div class="header-actions">
+    <a routerLink="/search" class="icon-button search-link" aria-label="Search titles"
+      ><luma-icon name="search" /><span>Search</span><kbd>⌘ K</kbd></a
+    ><span class="header-divider"></span
+    ><a class="avatar" routerLink="/profile" aria-label="Your profile">J<span></span></a>
+  </div>
+</header>
+<main id="main" tabindex="-1"><router-outlet /></main>
+<footer class="site-footer">
+  <a class="brand small" routerLink="/">luma.</a><span>A little escape. A whole new world.</span
+  ><small>Showcase edition · Mock catalog</small>
+</footer>
+<nav class="mobile-nav" aria-label="Mobile navigation">
+  <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+    ><luma-icon name="home" />Discover</a
+  >
+  <a routerLink="/movies" routerLinkActive="active"><luma-icon name="grid" />Browse</a>
+  <a routerLink="/search" routerLinkActive="active"><luma-icon name="search" />Search</a>
+  <a routerLink="/list" routerLinkActive="active"><luma-icon name="bookmark" />My List</a>
+</nav>
+<div class="toast" role="status" [class.visible]="store.notice()">
+  <luma-icon name="check" />{{ store.notice() }}
+</div>

@@ -14,7 +14,7 @@
         <span class="live-dot"></span> THE SPOTLIGHT <span class="eyebrow-line"></span> A WORLD
         WORTH GETTING LOST IN
       </div>
-      <div class="hero-award"><span>✦</span> THE BIGGEST STORIES. ALL HERE.</div>
+      <div class="hero-award"><span>✦</span> ONE STORY. A FIRST LOOK.</div>
       <h1 id="hero-title" class="dune-title">DUNE<span>PART TWO</span></h1>
       <div class="film-meta">
         <strong>98% match</strong><span>2024</span><span class="rating">PG-13</span
@@ -45,116 +45,18 @@
       <span class="vertical-line"></span
       ><span>Extraordinary stories.<br /><strong>Exceptional escapes.</strong></span>
     </div>
-    <a class="hero-next" routerLink="/title/interstellar"
-      ><span>UP NEXT</span><strong>Interstellar <luma-icon name="arrow" /></strong
-    ></a>
   </section>
   <div class="home-content">
-    <div class="discovery-bar">
-      <div class="greeting">
-        Your evening, upgraded.<span>Find something that stays with you.</span>
-      </div>
-      <div class="discovery-chips">
-        <a class="chip selected" routerLink="/">For you</a
-        ><a class="chip" routerLink="/movies">Movies</a
-        ><a class="chip" routerLink="/series">TV Shows</a
-        ><a class="chip" routerLink="/movies" [queryParams]="{ genre: 'Sci-Fi' }"
-          ><luma-icon name="sparkle" /> A little sci-fi</a
-        >
-      </div>
-    </div>
-    <section class="rail-section">
-      <div class="section-heading">
-        <div>
-          <span class="section-kicker">THE CONVERSATION STARTERS</span>
-          <h2>Trending this week <span class="cyan-dot">↗</span></h2>
-        </div>
-        <div class="rail-tools">
-          <a routerLink="/movies">View all <luma-icon name="arrow" /></a
-          ><button
-            class="round-button"
-            type="button"
-            aria-label="Previous trending titles"
-            (click)="scrollRail(trendingRail, -1)"
-          >
-            <luma-icon name="back" /></button
-          ><button
-            class="round-button"
-            type="button"
-            aria-label="Next trending titles"
-            (click)="scrollRail(trendingRail, 1)"
-          >
-            <luma-icon name="arrow" />
-          </button>
-        </div>
-      </div>
-      <div class="poster-rail" #trendingRail>
-        @for (film of trending; track film.id) {
-          <luma-film-card [film]="film" />
-        }
-      </div>
-    </section>
-    <section class="continue-section">
-      <div class="section-heading">
-        <div>
-          <span class="section-kicker">RIGHT WHERE YOU LEFT OFF</span>
-          <h2>Continue watching</h2>
-        </div>
-        <span class="muted mini">YOUR PERSONAL INTERMISSION</span>
-      </div>
-      <div class="continue-grid">
-        <a routerLink="/watch/interstellar" class="continue-card space"
-          ><img src="/images/interstellar.jpg" alt="" loading="lazy" width="500" height="750" />
-          <div class="continue-overlay"></div>
-          <span class="continue-play"><luma-icon name="play" /></span>
-          <div class="continue-info">
-            <h3>Interstellar</h3>
-            <span>Movie <b>·</b> 1h 12m left</span>
-          </div>
-          <span class="progress-track"><i style="width: 57%"></i></span></a
-        ><a routerLink="/watch/severance" class="continue-card"
-          ><img src="/images/severance.jpg" alt="" loading="lazy" width="500" height="750" />
-          <div class="continue-overlay"></div>
-          <span class="continue-play"><luma-icon name="play" /></span>
-          <div class="continue-info">
-            <h3>Severance</h3>
-            <span>S1 E4 · The You You Are <b>·</b> 24m left</span>
-          </div>
-          <span class="progress-track"><i style="width: 42%"></i></span
-        ></a>
-        <div class="discovery-note">
-          <luma-icon name="sparkle" /><span
-            >Less scrolling.<br /><strong>More discovering.</strong></span
-          >
-          <p>Your next obsession is just a play away.</p>
-          <a routerLink="/search">Find your next favorite <luma-icon name="arrow" /></a>
-        </div>
-      </div>
-    </section>
-    <section class="rail-section">
-      <div class="section-heading">
-        <div>
-          <span class="section-kicker">HANDPICKED FOR YOUR KIND OF ESCAPE</span>
-          <h2>Made for your movie nights</h2>
-        </div>
-        <a routerLink="/movies">Explore collection <luma-icon name="arrow" /></a>
-      </div>
-      <div class="poster-rail">
-        @for (film of picks; track film.id) {
-          <luma-film-card [film]="film" />
-        }
-      </div>
-    </section>
-    <section class="editorial-banner">
-      <span class="editorial-number">01 / COLLECTION</span>
+    <section class="showcase-disclaimer" aria-labelledby="showcase-heading">
+      <luma-icon name="info" />
       <div>
-        <span class="section-kicker">BEYOND THE EVERYDAY</span>
-        <h2>Stay curious.<br />Go somewhere extraordinary.</h2>
-        <a class="button glass" routerLink="/movies" [queryParams]="{ genre: 'Sci-Fi' }"
-          >Explore sci-fi <luma-icon name="arrow"
-        /></a>
+        <span class="section-kicker">A FIRST LOOK</span>
+        <h2 id="showcase-heading">A little preview of what’s to come.</h2>
+        <p>
+          This is a skeleton to work on the look and feel while the content is being prepared. We’ll
+          add more cool content over time.
+        </p>
       </div>
-      <span class="orbit" aria-hidden="true"></span>
     </section>
   </div>
 } @else {
@@ -164,7 +66,7 @@
         ? 'SAVED FOR A GOOD NIGHT'
         : page === 'search'
           ? 'DISCOVER YOUR NEXT FAVORITE'
-          : 'THE LUMA COLLECTION'
+          : 'THE MOVIE COLLECTION'
     }}</span>
     <h1>{{ heading }}</h1>
     <p class="muted">
@@ -204,7 +106,9 @@
           </button>
         }
       </div>
-      <span class="muted">{{ filtered().length }} titles</span>
+      <span class="muted"
+        >{{ filtered().length }} {{ filtered().length === 1 ? 'title' : 'titles' }}</span
+      >
     </div>
     <div class="catalog-grid">
       @for (film of filtered(); track film.id) {

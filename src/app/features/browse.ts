@@ -20,10 +20,7 @@ export class Browse {
   readonly home = this.page === '';
   readonly query = computed(() => this.params()?.get('q') ?? '');
   readonly genre = computed(() => this.params()?.get('genre') ?? 'All');
-  readonly genres = ['All', 'Sci-Fi', 'Action', 'Drama', 'Thriller'];
-  readonly featured = FILMS[0];
-  readonly trending = FILMS.slice(1, 7);
-  readonly picks = [FILMS[6], FILMS[7], FILMS[8], FILMS[9], FILMS[0], FILMS[2]];
+  readonly genres = ['All', ...new Set(FILMS.map((film) => film.genre))];
   readonly filtered = computed(() =>
     FILMS.filter(
       (f) =>
@@ -55,12 +52,6 @@ export class Browse {
       queryParams: { q: value || null },
       queryParamsHandling: 'merge',
       replaceUrl: true,
-    });
-  }
-  scrollRail(rail: HTMLElement, direction: number): void {
-    rail.scrollBy({
-      left: direction * rail.clientWidth * 0.8,
-      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
     });
   }
 }

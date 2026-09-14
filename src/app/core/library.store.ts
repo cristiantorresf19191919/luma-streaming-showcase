@@ -24,9 +24,7 @@ export class LibraryStore {
   }
   private readSaved(): readonly string[] {
     try {
-      const raw: unknown = JSON.parse(
-        localStorage.getItem('luma:list') ?? '["interstellar","severance","blade"]',
-      );
+      const raw: unknown = JSON.parse(localStorage.getItem('luma:list') ?? '[]');
       return Array.isArray(raw)
         ? raw.filter(
             (id): id is string => typeof id === 'string' && FILMS.some((film) => film.id === id),

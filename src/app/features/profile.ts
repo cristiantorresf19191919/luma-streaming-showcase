@@ -23,7 +23,7 @@ import { Icon } from '../shared/icon';
         ><luma-icon name="arrow"
       /></a>
       <p class="profile-note">
-        You’re exploring the Luma showcase as Jamie.<br />Your saved titles stay on this device.
+        You’re exploring the movie showcase as Jamie.<br />Your saved titles stay on this device.
       </p>
       <a class="button primary" routerLink="/">Back to discovering</a>
     </div>

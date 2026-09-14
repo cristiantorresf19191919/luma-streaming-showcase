@@ -78,17 +78,19 @@ import { FilmCard } from '../shared/film-card';
             }
           </div>
         }
-        <div class="section-heading">
-          <div>
-            <span class="section-kicker">KEEP THE FEELING GOING</span>
-            <h2>More like this</h2>
+        @if (related().length) {
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker">KEEP THE FEELING GOING</span>
+              <h2>More like this</h2>
+            </div>
           </div>
-        </div>
-        <div class="poster-rail">
-          @for (item of related(); track item.id) {
-            <luma-film-card [film]="item" />
-          }
-        </div>
+          <div class="poster-rail">
+            @for (item of related(); track item.id) {
+              <luma-film-card [film]="item" />
+            }
+          </div>
+        }
       </section>
     } @else {
       <section class="page-shell empty-state">
@@ -126,6 +128,6 @@ export class Detail {
     { number: 3, title: 'The turning point', description: 'One decision changes everything.' },
   ];
   constructor() {
-    effect(() => this.title.setTitle(`${this.film()?.title ?? 'Title not found'} — Luma`));
+    effect(() => this.title.setTitle(`${this.film()?.title ?? 'Title not found'} — movie`));
   }
 }

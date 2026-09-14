@@ -1995,3 +1995,49 @@ luma-profile {
     transform: translateY(0);
   }
 }
+
+.showcase-disclaimer {
+  display: flex;
+  gap: 18px;
+  padding: 27px;
+  margin: 6px 0 42px;
+  border: 1px solid #4ed6e530;
+  border-radius: 12px;
+  background: #111d23;
+}
+.showcase-disclaimer > luma-icon {
+  color: var(--cyan);
+  margin-top: 3px;
+}
+.showcase-disclaimer h2 {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+.showcase-disclaimer p {
+  color: #b9c7d0;
+  max-width: 740px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.creator-link {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  display: inline-block;
+  padding: 12px 0;
+}
+@media (max-width: 599px) {
+  .showcase-disclaimer {
+    padding: 20px;
+    gap: 12px;
+  }
+  .showcase-disclaimer h2 {
+    font-size: 19px;
+  }
+  .site-header {
+    gap: 15px;
+  }
+  .header-actions {
+    gap: 10px;
+  }
+}

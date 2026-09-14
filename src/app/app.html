@@ -1,14 +1,13 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
-  <a class="brand" routerLink="/" aria-label="Luma home"
-    ><span class="brand-mark"><i></i><i></i><i></i></span>luma<span class="brand-dot">.</span></a
+  <a class="brand" routerLink="/" aria-label="movie home"
+    ><span class="brand-mark"><i></i><i></i><i></i></span>movie<span class="brand-dot">.</span></a
   >
   <nav class="desktop-nav" aria-label="Main navigation">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
       >Discover</a
     >
     <a routerLink="/movies" routerLinkActive="active">Movies</a>
-    <a routerLink="/series" routerLinkActive="active">TV Shows</a>
     <a routerLink="/list" routerLinkActive="active"
       >My List <span class="nav-count">{{ store.saved().length }}</span></a
     >
@@ -22,8 +21,17 @@
 </header>
 <main id="main" tabindex="-1"><router-outlet /></main>
 <footer class="site-footer">
-  <a class="brand small" routerLink="/">luma.</a><span>A little escape. A whole new world.</span
-  ><small>Showcase edition · Mock catalog</small>
+  <a class="brand small" routerLink="/">movie.</a><span>A little escape. A whole new world.</span
+  ><small
+    >Created by
+    <a
+      class="creator-link"
+      href="https://agencypartner2.netlify.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Optimus</a
+    ></small
+  >
 </footer>
 <nav class="mobile-nav" aria-label="Mobile navigation">
   <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"

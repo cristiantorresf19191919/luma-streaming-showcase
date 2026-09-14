@@ -1,6 +1,6 @@
-# Luma
+# movie
 
-A mobile-first cinematic streaming showcase built with Angular 22.1.6. All catalog data, episode descriptions, recommendations, and companion replies are mocked. No backend, authentication, payment, or AI service is connected.
+A single-movie, mobile-first cinematic streaming showcase built with Angular 22.1.6. All catalog data, episode descriptions, recommendations, and companion replies are mocked. No backend, authentication, payment, or AI service is connected.
 
 ## Run locally
 
@@ -62,3 +62,5 @@ Movie and series artwork is demonstration material served from The Movie Databas
 - DM Sans and Manrope: Google Fonts, SIL Open Font License (licenses included in `public/fonts`).
 
 No credentials are committed. `.netlify`, generated builds, browser traces and screenshot artifacts are ignored.
+
+Current catalog: Dune: Part Two only. The home disclaimer explains the look-and-feel skeleton; more content will be added later. Footer credit links to Optimus.

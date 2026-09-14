@@ -80,7 +80,7 @@ import { Icon } from '../shared/icon';
           @if (companion()) {
             <aside class="companion">
               <div class="companion-header">
-                <span><luma-icon name="sparkle" />Luma companion</span
+                <span><luma-icon name="sparkle" />movie companion</span
                 ><button
                   class="icon-button"
                   aria-label="Close story companion"
@@ -147,7 +147,7 @@ export class Player {
   readonly prompts = ['Story summary', 'Behind the scenes', 'Similar stories'];
   private readonly title = inject(Title);
   constructor() {
-    effect(() => this.title.setTitle(`Watch ${this.film()?.title ?? 'preview'} — Luma`));
+    effect(() => this.title.setTitle(`Watch ${this.film()?.title ?? 'preview'} — movie`));
   }
   ask(prompt: string): void {
     const film = this.film();
@@ -162,7 +162,7 @@ export class Player {
         `Keep exploring with ${
           FILMS.filter((item) => item.genre === film.genre && item.id !== film.id)
             .map((item) => item.title)
-            .join(', ') || 'the rest of our handpicked collection'
+            .join(', ') || 'more stories as our collection grows'
         }. Find them in Discover.`,
       );
     else

@@ -46,12 +46,18 @@ Search by title, genre, actor, or director; filter movies and series; add/remove
 
 ## Deployment
 
-`netlify.toml` builds the static app into `dist/luma/browser`, adds SPA fallback routing and security headers. The initial production deployment is performed with the Netlify CLI. GitHub holds the source; automatic Git-triggered Netlify deployments are not configured.
+Pushes to `main` in [the GitHub repository](https://github.com/cristiantorresf19191919/luma-streaming-showcase) automatically build and publish [the production site](https://luma-cinema-showcase.netlify.app).
+
+Netlify uses Node.js 24, runs `npm run build`, and publishes `dist/luma/browser` as configured in `netlify.toml`. Repository access uses a read-only deploy key; a GitHub webhook triggers deployments.
 
 ```sh
-npm run build
-npx netlify-cli deploy --prod --dir dist/luma/browser --no-build
+git switch main
+git add <changed-files>
+git commit -m "Describe your change"
+git push origin main
 ```
+
+Check build progress and errors in [Netlify deployments](https://app.netlify.com/projects/luma-cinema-showcase/deploys). A failed build does not replace the last successful production deployment.
 
 ## Asset credits
 

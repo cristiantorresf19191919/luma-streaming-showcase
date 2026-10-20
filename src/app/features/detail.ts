@@ -2,7 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@a
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FILMS, poster } from '../core/catalog';
+import { FILMS, filmDescription, filmTitle, poster } from '../core/catalog';
+import type { I18nKey } from '../core/i18n.dict';
+import { I18nService } from '../core/i18n.service';
 import { LibraryStore } from '../core/library.store';
 import { Icon } from '../shared/icon';
 import { FilmCard } from '../shared/film-card';
@@ -22,20 +24,20 @@ import { FilmCard } from '../shared/film-card';
         />
         <div class="detail-gradient"></div>
         <div class="detail-content page-shell">
-          <a routerLink="/" class="back-link"><luma-icon name="back" />Back to discover</a
-          ><span class="section-kicker">YOUR NEXT GREAT ESCAPE</span>
-          <h1>{{ film.title }}</h1>
+          <a routerLink="/" class="back-link"
+            ><luma-icon name="back" />{{ i18n.t('detail.back') }}</a
+          ><span class="section-kicker">{{ i18n.t('detail.kicker') }}</span>
+          <h1>{{ titleOf(film) }}</h1>
           <div class="film-meta">
-            <strong>Critically acclaimed</strong><span>{{ film.year }}</span
-            ><span class="rating">{{ film.rating }}</span
-            ><span>{{ film.duration }}</span
-            ><span class="quality">4K</span>
+            <strong>{{ i18n.t('detail.acclaimed') }}</strong
+            ><span>{{ film.year }}</span><span class="rating">{{ film.rating }}</span
+            ><span>{{ film.duration }}</span><span class="quality">4K</span>
           </div>
-          <p class="detail-description">{{ film.description }}</p>
+          <p class="detail-description">{{ descriptionOf(film) }}</p>
           <div class="actions">
             <a class="button primary" [routerLink]="['/watch', film.id]"
               ><luma-icon name="play" />{{
-                film.kind === 'series' ? 'Play episode' : 'Watch now'
+                film.kind === 'series' ? i18n.t('detail.playEpisode') : i18n.t('detail.watch')
               }}</a
             ><button
               type="button"
@@ -44,22 +46,22 @@ import { FilmCard } from '../shared/film-card';
               [attr.aria-pressed]="store.saved().includes(film.id)"
             >
               <luma-icon [name]="store.saved().includes(film.id) ? 'check' : 'plus'" />{{
-                store.saved().includes(film.id) ? 'In My List' : 'My List'
+                store.saved().includes(film.id) ? i18n.t('detail.inList') : i18n.t('detail.myList')
               }}
             </button>
           </div>
           <div class="detail-credits">
-            <p><span>Directed / created by</span>{{ film.director }}</p>
-            <p><span>Starring</span>{{ film.cast }}</p>
-            <p><span>Genre</span>{{ film.genre }}</p>
+            <p><span>{{ i18n.t('detail.directed') }}</span>{{ film.director }}</p>
+            <p><span>{{ i18n.t('detail.starring') }}</span>{{ film.cast }}</p>
+            <p><span>{{ i18n.t('detail.genre') }}</span>{{ genreLabel(film.genre) }}</p>
           </div>
         </div>
       </section>
       <section class="page-shell detail-bottom">
         @if (film.kind === 'series') {
           <div class="section-heading">
-            <h2>Start the story</h2>
-            <span class="muted">Season 1 · Preview episodes</span>
+            <h2>{{ i18n.t('detail.episodes.heading') }}</h2>
+            <span class="muted">{{ i18n.t('detail.episodes.meta') }}</span>
           </div>
           <div class="episode-list">
             @for (episode of episodes; track episode.number) {
@@ -81,8 +83,8 @@ import { FilmCard } from '../shared/film-card';
         @if (related().length) {
           <div class="section-heading">
             <div>
-              <span class="section-kicker">KEEP THE FEELING GOING</span>
-              <h2>More like this</h2>
+              <span class="section-kicker">{{ i18n.t('detail.related.kicker') }}</span>
+              <h2>{{ i18n.t('detail.related.heading') }}</h2>
             </div>
           </div>
           <div class="poster-rail">
@@ -94,9 +96,9 @@ import { FilmCard } from '../shared/film-card';
       </section>
     } @else {
       <section class="page-shell empty-state">
-        <h1>This title took a different turn.</h1>
-        <p>We couldn’t find that story in our collection.</p>
-        <a class="button primary" routerLink="/">Back to discover</a>
+        <h1>{{ i18n.t('detail.missing.title') }}</h1>
+        <p>{{ i18n.t('detail.missing.body') }}</p>
+        <a class="button primary" routerLink="/">{{ i18n.t('detail.missing.cta') }}</a>
       </section>
     }
   `,
@@ -112,6 +114,7 @@ export class Detail {
       .slice(0, 6),
   );
   readonly store = inject(LibraryStore);
+  readonly i18n = inject(I18nService);
   readonly poster = poster;
   readonly title = inject(Title);
   readonly episodes = [
@@ -128,6 +131,17 @@ export class Detail {
     { number: 3, title: 'The turning point', description: 'One decision changes everything.' },
   ];
   constructor() {
-    effect(() => this.title.setTitle(`${this.film()?.title ?? 'Title not found'} — movie`));
+    effect(() => {
+      const film = this.film();
+      const name = film ? filmTitle(film, this.i18n.lang()) : 'Title not found';
+      this.title.setTitle(`${name} — movie`);
+    });
+  }
+  titleOf = (film: (typeof FILMS)[number]) => filmTitle(film, this.i18n.lang());
+  descriptionOf = (film: (typeof FILMS)[number]) => filmDescription(film, this.i18n.lang());
+  genreLabel(genre: string): string {
+    const key = `genre.${genre}` as I18nKey;
+    const label = this.i18n.t(key);
+    return label === key ? genre : label;
   }
 }

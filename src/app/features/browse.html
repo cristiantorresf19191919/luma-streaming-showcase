@@ -1,9 +1,9 @@
 @if (home) {
-  <section class="hero" aria-labelledby="hero-title">
+  <section class="hero hero-invisibles" aria-labelledby="hero-title">
     <img
       class="hero-art"
-      src="/images/dune-hero.jpg"
-      alt="The vast desert world of Dune"
+      src="/images/invisibles.jpg"
+      alt="Invisible's — Coming soon October 31"
       width="1280"
       height="720"
       fetchpriority="high"
@@ -11,82 +11,73 @@
     <div class="hero-shade"></div>
     <div class="hero-content">
       <div class="eyebrow">
-        <span class="live-dot"></span> THE SPOTLIGHT <span class="eyebrow-line"></span> A WORLD
-        WORTH GETTING LOST IN
+        <span class="live-dot"></span> {{ i18n.t('hero.eyebrow') }}
+        <span class="eyebrow-line"></span> {{ i18n.t('hero.eyebrowLine') }}
       </div>
-      <div class="hero-award"><span>✦</span> ONE STORY. A FIRST LOOK.</div>
-      <h1 id="hero-title" class="dune-title">DUNE<span>PART TWO</span></h1>
+      <div class="hero-award"><span>✦</span> {{ i18n.t('hero.award') }}</div>
+      <h1 id="hero-title" class="dune-title hero-feature-title">
+        INVISIBLE'S<span>OCTOBER 31</span>
+      </h1>
       <div class="film-meta">
-        <strong>98% match</strong><span>2024</span><span class="rating">PG-13</span
-        ><span>2h 46m</span><span class="quality">4K</span><span class="quality">DOLBY ATMOS</span>
+        <strong>Lee Production</strong><span>2026</span><span class="rating">R</span
+        ><span>1h 48m</span><span class="quality">TRAILER</span>
       </div>
-      <p class="hero-description">
-        Some destinies are written in sand.<br />Journey beyond the ordinary with the film of a
-        generation.
-      </p>
+      <p class="hero-description" [innerHTML]="i18n.t('hero.description')"></p>
       <div class="actions">
-        <a class="button primary" routerLink="/watch/dune"><luma-icon name="play" />Watch now</a
-        ><a class="button glass" routerLink="/title/dune"><luma-icon name="info" />More info</a
+        <a class="button primary" routerLink="/watch/invisibles"
+          ><luma-icon name="play" />{{ i18n.t('hero.watch') }}</a
+        ><a class="button glass" routerLink="/title/invisibles"
+          ><luma-icon name="info" />{{ i18n.t('hero.more') }}</a
         ><button
           type="button"
           class="button icon-only glass"
           [attr.aria-label]="
-            store.saved().includes('dune') ? 'Remove Dune from your list' : 'Add Dune to your list'
+            store.saved().includes('invisibles')
+              ? i18n.t('hero.removeList')
+              : i18n.t('hero.addList')
           "
-          [attr.aria-pressed]="store.saved().includes('dune')"
-          (click)="store.toggle('dune')"
+          [attr.aria-pressed]="store.saved().includes('invisibles')"
+          (click)="store.toggle('invisibles')"
         >
-          <luma-icon [name]="store.saved().includes('dune') ? 'check' : 'plus'" />
+          <luma-icon [name]="store.saved().includes('invisibles') ? 'check' : 'plus'" />
         </button>
       </div>
-      <div class="hero-genres">SCI-FI <span>·</span> ADVENTURE <span>·</span> EPIC</div>
+      <div class="hero-genres">{{ i18n.t('hero.genres') }}</div>
     </div>
     <div class="spotlight-caption">
       <span class="vertical-line"></span
-      ><span>Extraordinary stories.<br /><strong>Exceptional escapes.</strong></span>
+      ><span
+        >{{ i18n.t('hero.caption') }}<br /><strong>{{ i18n.t('hero.captionStrong') }}</strong></span
+      >
     </div>
   </section>
   <div class="home-content">
     <section class="showcase-disclaimer" aria-labelledby="showcase-heading">
       <luma-icon name="info" />
       <div>
-        <span class="section-kicker">A FIRST LOOK</span>
-        <h2 id="showcase-heading">A little preview of what’s to come.</h2>
-        <p>
-          This is a skeleton to work on the look and feel while the content is being prepared. We’ll
-          add more cool content over time.
-        </p>
+        <span class="section-kicker">{{ i18n.t('home.kicker') }}</span>
+        <h2 id="showcase-heading">{{ i18n.t('home.heading') }}</h2>
+        <p>{{ i18n.t('home.body') }}</p>
       </div>
     </section>
   </div>
 } @else {
   <section class="catalog-page page-shell">
-    <span class="section-kicker">{{
-      page === 'list'
-        ? 'SAVED FOR A GOOD NIGHT'
-        : page === 'search'
-          ? 'DISCOVER YOUR NEXT FAVORITE'
-          : 'THE MOVIE COLLECTION'
-    }}</span>
-    <h1>{{ heading }}</h1>
-    <p class="muted">
-      {{
-        page === 'list'
-          ? 'All the stories you want to come back to. All in one place.'
-          : 'Big feelings, unexpected worlds, and stories that stay with you.'
-      }}
-    </p>
+    <span class="section-kicker">{{ kicker() }}</span>
+    <h1>{{ heading() }}</h1>
+    <p class="muted">{{ subcopy() }}</p>
     @if (page === 'search') {
       <div class="search-box">
-        <luma-icon name="search" /><label class="sr-only" for="catalog-search"
-          >Search by title, genre, actor or director</label
+        <luma-icon name="search" /><label class="sr-only" for="catalog-search">{{
+          i18n.t('browse.searchLabel')
+        }}</label
         ><input
           #searchInput
           id="catalog-search"
           type="search"
           name="catalog-search"
           autocomplete="off"
-          placeholder="Try a title, genre, actor, or director…"
+          [placeholder]="i18n.t('browse.searchPlaceholder')"
           [value]="query()"
           (input)="search(searchInput.value)"
         />
@@ -102,12 +93,13 @@
             [attr.aria-pressed]="genre() === g"
             (click)="filter(g)"
           >
-            {{ g === 'All' ? 'All genres' : g }}
+            {{ genreChip(g) }}
           </button>
         }
       </div>
       <span class="muted"
-        >{{ filtered().length }} {{ filtered().length === 1 ? 'title' : 'titles' }}</span
+        >{{ filtered().length }}
+        {{ filtered().length === 1 ? i18n.t('browse.title') : i18n.t('browse.titles') }}</span
       >
     </div>
     <div class="catalog-grid">
@@ -117,16 +109,16 @@
         <div class="empty-state">
           <luma-icon [name]="page === 'list' ? 'bookmark' : 'search'" />
           <h2>
-            {{ page === 'list' ? 'Your next chapter starts here.' : 'No stories found. Yet.' }}
+            {{
+              page === 'list' ? i18n.t('browse.empty.listTitle') : i18n.t('browse.empty.searchTitle')
+            }}
           </h2>
           <p>
             {{
-              page === 'list'
-                ? 'Tap + on any title to save it for later.'
-                : 'Try another title or choose a different genre.'
+              page === 'list' ? i18n.t('browse.empty.listBody') : i18n.t('browse.empty.searchBody')
             }}
           </p>
-          <a routerLink="/" class="button primary">Discover something great</a>
+          <a routerLink="/" class="button primary">{{ i18n.t('browse.empty.cta') }}</a>
         </div>
       }
     </div>

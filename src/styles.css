@@ -207,35 +207,40 @@ body:has(.player-page) {
 .brand {
   display: inline-flex;
   align-items: center;
+  gap: 11px;
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+.brand:hover {
+  transform: translateY(-1px);
+  filter: drop-shadow(0 0 12px #4ed6e633);
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+}
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.brand-word {
   font-family: 'Manrope', sans-serif;
-  font-size: 35px;
+  font-size: 28px;
   font-weight: 800;
-  letter-spacing: -2px;
-  gap: 10px;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  text-transform: lowercase;
 }
 .brand-dot {
   color: var(--cyan);
-  margin-left: -10px;
-}
-.brand-mark {
-  height: 25px;
-  display: flex;
-  gap: 3px;
-  align-items: flex-end;
-  transform: skew(-13deg);
-  margin-right: 3px;
-}
-.brand-mark i {
-  width: 5px;
-  height: 25px;
-  border-radius: 2px;
-  background: var(--cyan);
-}
-.brand-mark i:nth-child(2) {
-  height: 18px;
-}
-.brand-mark i:nth-child(3) {
-  height: 11px;
+  margin-left: 1px;
 }
 .desktop-nav {
   display: none;
@@ -244,7 +249,43 @@ body:has(.player-page) {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 21px;
+  gap: 12px;
+}
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  min-width: 44px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid #ffffff22;
+  background: #0f171cbf;
+  color: #e7eef1;
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition:
+    border-color 0.25s var(--ease),
+    background 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+.lang-toggle:hover,
+.lang-toggle:focus-visible {
+  border-color: var(--cyan);
+  color: white;
+}
+.lang-code {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+.lang-label {
+  display: none;
+  font-size: 12px;
+  font-weight: 500;
 }
 .icon-button {
   display: inline-flex;
@@ -361,6 +402,23 @@ body:has(.player-page) {
   display: block;
   margin: 20px 0 24px 8px;
   font-weight: 500;
+}
+.hero-invisibles .hero-art {
+  object-fit: cover;
+  /* Baja el encuadre: más del rostro/cuerpo en el centro del hero */
+  object-position: 30% 28%;
+  filter: saturate(0.92) contrast(1.05);
+}
+.hero-feature-title {
+  font-size: clamp(42px, 12vw, 78px);
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+.hero-feature-title > span {
+  letter-spacing: 0.42em;
+  color: #c45a5a;
+  font-size: 13px;
+  margin-left: 2px;
 }
 .film-meta {
   display: flex;
@@ -677,6 +735,20 @@ body:has(.player-page) {
   margin-top: 7px;
   gap: 2px;
 }
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.card-action {
+  width: 100%;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  font-size: 12px;
+  border-radius: 8px;
+}
 .card-caption > a {
   font-weight: 550;
   font-size: 12px;
@@ -852,7 +924,14 @@ body:has(.player-page) {
   gap: 16px;
 }
 .brand.small {
-  font-size: 26px;
+  gap: 8px;
+}
+.brand.small .brand-mark {
+  width: 24px;
+  height: 24px;
+}
+.brand.small .brand-word {
+  font-size: 20px;
 }
 .site-footer > span {
   font-size: 10px;
@@ -1458,6 +1537,16 @@ video {
   .header-divider {
     display: block;
   }
+  .lang-label {
+    display: inline;
+  }
+  .lang-toggle {
+    padding: 0 14px;
+    gap: 10px;
+  }
+  .header-actions {
+    gap: 18px;
+  }
   .search-link kbd {
     font-size: 9px;
     color: #7e8b94;
@@ -1483,6 +1572,9 @@ video {
   }
   .hero-art {
     object-position: center 42%;
+  }
+  .hero-invisibles .hero-art {
+    object-position: 30% 32%;
   }
   .hero-shade {
     background:
@@ -1815,6 +1907,9 @@ video {
   .hero-art {
     object-position: center 45%;
   }
+  .hero-invisibles .hero-art {
+    object-position: 32% 30%;
+  }
   .card-caption > a {
     font-size: 14px;
   }
@@ -1841,6 +1936,10 @@ video {
   }
   .hero-art {
     object-position: 61% top;
+    height: 540px;
+  }
+  .hero-invisibles .hero-art {
+    object-position: 35% 22%;
     height: 540px;
   }
   .hero-shade {

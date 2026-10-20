@@ -1,8 +1,10 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { FILMS } from './catalog';
+import { I18nService } from './i18n.service';
 
 @Injectable({ providedIn: 'root' })
 export class LibraryStore {
+  private readonly i18n = inject(I18nService);
   readonly saved = signal<readonly string[]>(this.readSaved());
   readonly notice = signal('');
   private noticeTimer?: ReturnType<typeof setTimeout>;
@@ -12,9 +14,9 @@ export class LibraryStore {
     this.saved.update((ids) => (removing ? ids.filter((value) => value !== id) : [...ids, id]));
     try {
       localStorage.setItem('luma:list', JSON.stringify(this.saved()));
-      this.announce(removing ? 'Removed from your list' : 'Added to your list');
+      this.announce(removing ? this.i18n.t('toast.removed') : this.i18n.t('toast.added'));
     } catch {
-      this.announce('List updated for this visit. Device storage is unavailable.');
+      this.announce(this.i18n.t('toast.storage'));
     }
   }
   announce(message: string): void {

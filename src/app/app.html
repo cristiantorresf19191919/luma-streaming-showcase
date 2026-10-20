@@ -1,29 +1,65 @@
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">{{ i18n.t('skip') }}</a>
 <header class="site-header">
-  <a class="brand" routerLink="/" aria-label="movie home"
-    ><span class="brand-mark"><i></i><i></i><i></i></span>movie<span class="brand-dot">.</span></a
-  >
-  <nav class="desktop-nav" aria-label="Main navigation">
+  <a class="brand" routerLink="/" aria-label="movie home">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="38" height="38" rx="11" fill="#0d161b" stroke="#4ed6e655" stroke-width="1.5" />
+        <path
+          d="M8 7h3.2v3.2H8zm0 6.4h3.2v3.2H8zm0 6.4h3.2v3.2H8zm0 6.4h3.2V32H8z"
+          fill="#4ed6e6"
+          opacity="0.55"
+        />
+        <path d="M17.2 13.2c0-.9.98-1.45 1.75-.98l11.1 6.8a1.12 1.12 0 0 1 0 1.96l-11.1 6.8c-.77.47-1.75-.08-1.75-.98V13.2Z" fill="#4ed6e6" />
+      </svg>
+    </span>
+    <span class="brand-word">movie<span class="brand-dot">.</span></span>
+  </a>
+  <nav class="desktop-nav" [attr.aria-label]="i18n.t('nav.mainAria')">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-      >Discover</a
+      >{{ i18n.t('nav.discover') }}</a
     >
-    <a routerLink="/movies" routerLinkActive="active">Movies</a>
+    <a routerLink="/movies" routerLinkActive="active">{{ i18n.t('nav.movies') }}</a>
     <a routerLink="/list" routerLinkActive="active"
-      >My List <span class="nav-count">{{ store.saved().length }}</span></a
+      >{{ i18n.t('nav.myList') }} <span class="nav-count">{{ store.saved().length }}</span></a
     >
   </nav>
   <div class="header-actions">
-    <a routerLink="/search" class="icon-button search-link" aria-label="Search titles"
-      ><luma-icon name="search" /><span>Search</span><kbd>⌘ K</kbd></a
+    <button
+      type="button"
+      class="lang-toggle"
+      [attr.aria-label]="i18n.t('lang.toggleAria')"
+      (click)="i18n.toggle()"
+    >
+      <span class="lang-code">{{ i18n.lang() === 'en' ? 'ES' : 'EN' }}</span>
+      <span class="lang-label">{{ i18n.t('lang.toggle') }}</span>
+    </button>
+    <a routerLink="/search" class="icon-button search-link" [attr.aria-label]="i18n.t('nav.searchAria')"
+      ><luma-icon name="search" /><span>{{ i18n.t('nav.search') }}</span><kbd>⌘ K</kbd></a
     ><span class="header-divider"></span
-    ><a class="avatar" routerLink="/profile" aria-label="Your profile">J<span></span></a>
+    ><a class="avatar" routerLink="/profile" [attr.aria-label]="i18n.t('nav.profileAria')"
+      >J<span></span
+    ></a>
   </div>
 </header>
 <main id="main" tabindex="-1"><router-outlet /></main>
 <footer class="site-footer">
-  <a class="brand small" routerLink="/">movie.</a><span>A little escape. A whole new world.</span
+  <a class="brand small" routerLink="/" aria-label="movie home">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="38" height="38" rx="11" fill="#0d161b" stroke="#4ed6e655" stroke-width="1.5" />
+        <path
+          d="M8 7h3.2v3.2H8zm0 6.4h3.2v3.2H8zm0 6.4h3.2v3.2H8zm0 6.4h3.2V32H8z"
+          fill="#4ed6e6"
+          opacity="0.55"
+        />
+        <path d="M17.2 13.2c0-.9.98-1.45 1.75-.98l11.1 6.8a1.12 1.12 0 0 1 0 1.96l-11.1 6.8c-.77.47-1.75-.08-1.75-.98V13.2Z" fill="#4ed6e6" />
+      </svg>
+    </span>
+    <span class="brand-word">movie<span class="brand-dot">.</span></span>
+  </a>
+  <span>{{ i18n.t('footer.tagline') }}</span
   ><small
-    >Created by
+    >{{ i18n.t('footer.created') }}
     <a
       class="creator-link"
       href="https://agencypartner2.netlify.app/"
@@ -33,13 +69,19 @@
     ></small
   >
 </footer>
-<nav class="mobile-nav" aria-label="Mobile navigation">
+<nav class="mobile-nav" [attr.aria-label]="i18n.t('nav.mobileAria')">
   <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-    ><luma-icon name="home" />Discover</a
+    ><luma-icon name="home" />{{ i18n.t('nav.discover') }}</a
   >
-  <a routerLink="/movies" routerLinkActive="active"><luma-icon name="grid" />Browse</a>
-  <a routerLink="/search" routerLinkActive="active"><luma-icon name="search" />Search</a>
-  <a routerLink="/list" routerLinkActive="active"><luma-icon name="bookmark" />My List</a>
+  <a routerLink="/movies" routerLinkActive="active"
+    ><luma-icon name="grid" />{{ i18n.t('nav.browse') }}</a
+  >
+  <a routerLink="/search" routerLinkActive="active"
+    ><luma-icon name="search" />{{ i18n.t('nav.search') }}</a
+  >
+  <a routerLink="/list" routerLinkActive="active"
+    ><luma-icon name="bookmark" />{{ i18n.t('nav.myList') }}</a
+  >
 </nav>
 <div class="toast" role="status" [class.visible]="store.notice()">
   <luma-icon name="check" />{{ store.notice() }}

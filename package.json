@@ -14,7 +14,8 @@
     "prebuild": "node scripts/configure-env.mjs",
     "pretest": "node scripts/configure-env.mjs",
     "pretest:ui": "node scripts/configure-env.mjs",
-    "prewatch": "node scripts/configure-env.mjs"
+    "prewatch": "node scripts/configure-env.mjs",
+    "postbuild": "node scripts/configure-sw.mjs"
   },
   "private": true,
   "packageManager": "npm@11.11.1",

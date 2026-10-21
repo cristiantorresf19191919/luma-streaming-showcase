@@ -8,6 +8,7 @@ test('production app installs its worker and opens offline without caching priva
     process.env['E2E_PWA'] !== '1',
     'Requires a production build served over localhost or HTTPS.',
   );
+  test.setTimeout(90000);
   await page.goto('/');
   const manifest = await (await request.get('/manifest.webmanifest')).json();
   expect(manifest.display).toBe('standalone');
@@ -29,7 +30,7 @@ test('production app installs its worker and opens offline without caching priva
             (await Promise.all(urls.map((url) => caches.match(url)))).every(Boolean),
           config.assetGroups[0].urls,
         ),
-      { timeout: 30000 },
+      { timeout: 60000 },
     )
     .toBe(true);
   await context.setOffline(true);

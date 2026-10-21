@@ -62,6 +62,7 @@ import { Icon } from '../shared/icon';
                 type="button"
                 class="button glass companion-toggle"
                 [attr.aria-expanded]="companion()"
+                [attr.aria-label]="i18n.t('player.companion')"
                 (click)="companion.set(!companion())"
               >
                 <luma-icon name="sparkle" />{{ i18n.t('player.companion') }}
@@ -76,7 +77,9 @@ import { Icon } from '../shared/icon';
                 <span><luma-icon name="sparkle" />movie companion</span
                 ><button
                   class="icon-button"
-                  [attr.aria-label]="i18n.t('player.companion')"
+                  [attr.aria-label]="
+                    i18n.lang() === 'en' ? 'Close story companion' : 'Cerrar compañero de historia'
+                  "
                   type="button"
                   (click)="companion.set(false)"
                 >
@@ -169,12 +172,9 @@ export class Player {
     const film = this.film();
     if (!film) return;
     const lang = this.i18n.lang();
-    const summary =
-      prompt === 'Story summary' || prompt === 'Resumen';
-    const behind =
-      prompt === 'Behind the scenes' || prompt === 'Detrás de cámaras';
-    const similar =
-      prompt === 'Similar stories' || prompt === 'Historias similares';
+    const summary = prompt === 'Story summary' || prompt === 'Resumen';
+    const behind = prompt === 'Behind the scenes' || prompt === 'Detrás de cámaras';
+    const similar = prompt === 'Similar stories' || prompt === 'Historias similares';
     if (summary) this.answer.set(filmDescription(film, lang));
     else if (behind)
       this.answer.set(

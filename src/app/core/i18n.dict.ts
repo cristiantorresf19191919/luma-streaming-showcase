@@ -2,7 +2,7 @@ export type Lang = 'en' | 'es';
 
 const DICT = {
   en: {
-    'skip': 'Skip to content',
+    skip: 'Skip to content',
     'nav.discover': 'Discover',
     'nav.movies': 'Movies',
     'nav.myList': 'My List',
@@ -104,7 +104,7 @@ const DICT = {
     'genre.Horror': 'Horror',
   },
   es: {
-    'skip': 'Saltar al contenido',
+    skip: 'Saltar al contenido',
     'nav.discover': 'Descubrir',
     'nav.movies': 'Películas',
     'nav.myList': 'Mi lista',
@@ -148,7 +148,8 @@ const DICT = {
     'browse.heading.series': 'Un episodio más.',
     'browse.heading.default': 'Historias que valen la pena.',
     'browse.sub.list': 'Todas las historias a las que quieres volver. En un solo lugar.',
-    'browse.sub.default': 'Grandes emociones, mundos inesperados e historias que se quedan contigo.',
+    'browse.sub.default':
+      'Grandes emociones, mundos inesperados e historias que se quedan contigo.',
     'browse.searchLabel': 'Buscar por título, género, actor o director',
     'browse.searchPlaceholder': 'Prueba un título, género, actor o director…',
     'browse.allGenres': 'Todos los géneros',
@@ -200,7 +201,8 @@ const DICT = {
     'profile.cta': 'Volver a descubrir',
     'toast.added': 'Agregado a tu lista',
     'toast.removed': 'Eliminado de tu lista',
-    'toast.storage': 'Lista actualizada en esta visita. El almacenamiento del dispositivo no está disponible.',
+    'toast.storage':
+      'Lista actualizada en esta visita. El almacenamiento del dispositivo no está disponible.',
     'genre.All': 'Todos',
     'genre.Sci-Fi': 'Ciencia ficción',
     'genre.Horror': 'Terror',

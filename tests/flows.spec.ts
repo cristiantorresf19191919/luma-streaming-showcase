@@ -10,7 +10,7 @@ test('home renders all artwork without overflow and passes accessibility checks'
   await expect(
     page.getByRole('heading', { name: 'A little preview of what’s to come.' }),
   ).toBeVisible();
-  await expect(page.getByRole('link', { name: 'movie home' })).toBeVisible();
+  await expect(page.getByRole('banner').getByRole('link', { name: 'movie home' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Optimus' })).toHaveAttribute(
     'href',
     'https://agencypartner2.netlify.app/',

@@ -70,3 +70,18 @@ Movie and series artwork is demonstration material served from The Movie Databas
 No credentials are committed. `.netlify`, generated builds, browser traces and screenshot artifacts are ignored.
 
 Current catalog: Dune: Part Two only. The home disclaimer explains the look-and-feel skeleton; more content will be added later. Footer credit links to Optimus.
+
+## Firebase authentication and Netlify
+
+The MVP uses Firebase Authentication (Google and email/password) on the no-cost Spark plan. It does not require Firestore, Cloud Functions, Firebase Hosting, Analytics, or billing. Movie lists stay in local storage, separated by Firebase user ID; they do not sync across devices. Signing out restores the guest list.
+
+Project: `movies-diamond-1988d`, owned by `scriptcristian@gmail.com`.
+Netlify site: `moviesdiamond` (same account), serving `dist/luma/browser`.
+
+Copy `.env.example` to `.env.local` and fill in the four values from Firebase's web app settings. `npm start` and `npm run build` generate the ignored `src/environments/firebase.generated.ts`. Put those same four variable names in Netlify's build environment. These are public Firebase client identifiers, not admin secrets; never put a service-account key or password in the frontend environment. Netlify builds fail if configuration is missing.
+
+In Firebase Authentication enable email/password and Google. Set the Google support email to the project owner's address. Authorize `moviesdiamond.netlify.app` and the local development host (`localhost` and `127.0.0.1` when used). Preview deployments need their specific domain authorized before Google sign-in will work there.
+
+Validation: `npm ci`, `npm run build`, `npm test`, and `npm audit`. Install the test browser once with `npx playwright install chromium`. Tests cover responsive layouts, accessibility, both languages, form modes, catalog filtering, list persistence, and video playback. Real Google OAuth still requires a manual sign-in on an authorized domain.
+
+For an opt-in real backend check, run `E2E_LIVE_AUTH=1 npm test -- tests/auth-live.spec.ts --project=desktop --workers=1`. It creates a disposable `example.test` user, checks sign-up, session restoration, sign-out, sign-in, and per-user lists, then deletes that test user. It also verifies that Google's OAuth authorization URL is issued for the production domain. The ordinary suite mocks authentication errors and reset responses without sending email.

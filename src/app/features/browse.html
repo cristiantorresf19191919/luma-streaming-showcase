@@ -52,6 +52,48 @@
     </div>
   </section>
   <div class="home-content">
+    <section class="home-selection" aria-labelledby="selection-title">
+      <div class="selection-heading">
+        <div>
+          <span class="section-kicker">{{
+            i18n.lang() === 'en' ? 'THE SCREENING ROOM' : 'LA SALA DE CINE'
+          }}</span>
+          <h2 id="selection-title">
+            {{ i18n.lang() === 'en' ? 'A taste of what’s next.' : 'Un vistazo a lo que viene.' }}
+          </h2>
+        </div>
+        <a routerLink="/movies"
+          >{{ i18n.lang() === 'en' ? 'Explore all films' : 'Explorar películas' }} →</a
+        >
+      </div>
+      <div class="selection-grid">
+        @for (film of filtered(); track film.id) {
+          <luma-film-card [film]="film" />
+        }
+        <a class="membership-card" routerLink="/profile"
+          ><span class="section-kicker">{{
+            i18n.lang() === 'en' ? 'YOUR NEXT CHAPTER' : 'TU PRÓXIMO CAPÍTULO'
+          }}</span>
+          <h3>
+            {{
+              i18n.lang() === 'en'
+                ? 'Come for a film. Stay for the stories.'
+                : 'Ven por una película. Quédate por las historias.'
+            }}
+          </h3>
+          <p>
+            {{
+              i18n.lang() === 'en'
+                ? 'Create your free account and make yourself at home.'
+                : 'Crea tu cuenta gratis y siéntete en casa.'
+            }}
+          </p>
+          <span class="membership-cta"
+            >{{ i18n.lang() === 'en' ? 'Your space' : 'Tu espacio' }}
+            <luma-icon name="arrow" /></span
+        ></a>
+      </div>
+    </section>
     <section class="showcase-disclaimer" aria-labelledby="showcase-heading">
       <luma-icon name="info" />
       <div>
@@ -110,7 +152,9 @@
           <luma-icon [name]="page === 'list' ? 'bookmark' : 'search'" />
           <h2>
             {{
-              page === 'list' ? i18n.t('browse.empty.listTitle') : i18n.t('browse.empty.searchTitle')
+              page === 'list'
+                ? i18n.t('browse.empty.listTitle')
+                : i18n.t('browse.empty.searchTitle')
             }}
           </h2>
           <p>

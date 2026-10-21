@@ -48,3 +48,6 @@ Thumbs.db
 artifacts/
 test-results/
 playwright-report/
+
+.env.local
+src/environments/firebase.generated.ts

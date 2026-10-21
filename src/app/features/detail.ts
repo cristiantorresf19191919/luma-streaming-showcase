@@ -30,8 +30,10 @@ import { FilmCard } from '../shared/film-card';
           <h1>{{ titleOf(film) }}</h1>
           <div class="film-meta">
             <strong>{{ i18n.t('detail.acclaimed') }}</strong
-            ><span>{{ film.year }}</span><span class="rating">{{ film.rating }}</span
-            ><span>{{ film.duration }}</span><span class="quality">4K</span>
+            ><span>{{ film.year }}</span
+            ><span class="rating">{{ film.rating }}</span
+            ><span>{{ film.duration }}</span
+            ><span class="quality">4K</span>
           </div>
           <p class="detail-description">{{ descriptionOf(film) }}</p>
           <div class="actions">
@@ -51,9 +53,18 @@ import { FilmCard } from '../shared/film-card';
             </button>
           </div>
           <div class="detail-credits">
-            <p><span>{{ i18n.t('detail.directed') }}</span>{{ film.director }}</p>
-            <p><span>{{ i18n.t('detail.starring') }}</span>{{ film.cast }}</p>
-            <p><span>{{ i18n.t('detail.genre') }}</span>{{ genreLabel(film.genre) }}</p>
+            <p>
+              <span>{{ i18n.t('detail.directed') }}</span
+              >{{ film.director }}
+            </p>
+            <p>
+              <span>{{ i18n.t('detail.starring') }}</span
+              >{{ film.cast }}
+            </p>
+            <p>
+              <span>{{ i18n.t('detail.genre') }}</span
+              >{{ genreLabel(film.genre) }}
+            </p>
           </div>
         </div>
       </section>

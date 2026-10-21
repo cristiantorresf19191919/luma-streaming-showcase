@@ -51,7 +51,9 @@ export class Browse {
   });
   readonly subcopy = computed(() => {
     this.i18n.lang();
-    return this.page === 'list' ? this.i18n.t('browse.sub.list') : this.i18n.t('browse.sub.default');
+    return this.page === 'list'
+      ? this.i18n.t('browse.sub.list')
+      : this.i18n.t('browse.sub.default');
   });
   genreChip(genre: string): string {
     if (genre === 'All') return this.i18n.t('browse.allGenres');

@@ -1,0 +1,12 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid}/watchlist/{filmId} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && filmId.matches('^[a-z0-9-]{1,100}$')
+        && request.resource.data.keys().hasOnly(['saved'])
+        && request.resource.data.saved == true;
+    }
+  }
+}

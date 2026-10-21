@@ -2474,3 +2474,75 @@ button:disabled {
     font-size: clamp(30px, 9vw, 48px);
   }
 }
+
+/* Front Row offers share the cinema palette, with warm ticket accents. */
+button.membership-card {
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  width: 100%;
+}
+.front-row-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  margin: 50px auto 0;
+  max-width: 1440px;
+  padding: 36px 5%;
+  border-top: 1px solid #ffffff15;
+  background: linear-gradient(100deg, #172a2a80, transparent);
+}
+.front-row-banner .section-kicker {
+  color: #edc98d;
+}
+.front-row-banner h2 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 28px;
+  margin: 10px 0;
+}
+.front-row-banner p {
+  font-size: 13px;
+  color: #b6c2be;
+  margin: 0;
+}
+.front-row-banner .button {
+  background: #edc98d;
+  color: #182521;
+  white-space: nowrap;
+  min-height: 48px;
+}
+@media (max-width: 680px) {
+  .front-row-banner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 30px 24px;
+  }
+  .front-row-banner h2 {
+    font-size: 26px;
+  }
+  .front-row-banner .button {
+    justify-content: center;
+  }
+}
+@media (display-mode: standalone) {
+  .site-header {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+.install-app {
+  text-align: center;
+  padding: 0 24px 20px;
+}
+.install-app button {
+  min-height: 44px;
+}
+.install-app p {
+  max-width: 580px;
+  margin: 12px auto;
+  color: #b6c2be;
+  font-size: 12px;
+  line-height: 1.7;
+}

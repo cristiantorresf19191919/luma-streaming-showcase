@@ -1,0 +1,247 @@
+<dialog
+  #dialog
+  class="front-row"
+  aria-labelledby="membership-title"
+  (cancel)="close()"
+  (click)="backdrop($event)"
+>
+  <div class="offer-shell">
+    <button
+      class="offer-close"
+      type="button"
+      [attr.aria-label]="text('Close plans', 'Cerrar planes')"
+      (click)="close()"
+    >
+      ×
+    </button>
+    <div class="offer-story">
+      <span class="offer-kicker">MOVIE / FRONT ROW</span>
+      <span class="ticket-stamp" aria-hidden="true">m<span>✦</span></span>
+      <div class="story-copy">
+        <span class="offer-kicker">{{
+          text('A LITTLE ESCAPE. ALL YOURS.', 'TU PEQUEÑA GRAN ESCAPADA.')
+        }}</span>
+        <h2 id="membership-title">
+          {{ text('Make a night', 'Haz de una noche') }}<br /><em>{{
+            text('of it.', 'tu gran noche.')
+          }}</em>
+        </h2>
+        <p>
+          {{
+            text(
+              'For the stories that stay with you long after the credits.',
+              'Para las historias que siguen contigo después de los créditos.'
+            )
+          }}
+        </p>
+      </div>
+      <div class="ticket-perks">
+        <span>01 / {{ text('Discover something different', 'Descubre algo diferente') }}</span
+        ><span>02 / {{ text('Your list, on every device', 'Tu lista en cada dispositivo') }}</span
+        ><span>03 / {{ text('A home for movie nights', 'Un hogar para tus noches de cine') }}</span>
+      </div>
+      <small>{{
+        text('An invitation to our next chapter.', 'Una invitación a nuestro próximo capítulo.')
+      }}</small>
+    </div>
+    <div class="offer-content">
+      <span class="preview-label">{{
+        text('COMING SOON · PLAN PREVIEW', 'PRÓXIMAMENTE · VISTA PREVIA')
+      }}</span>
+      <h3>{{ text('Your seat. Your way.', 'Tu lugar. A tu manera.') }}</h3>
+      <p class="offer-muted">
+        {{
+          text(
+            'One unforgettable night, or a new ritual.',
+            'Una noche inolvidable o una nueva tradición.'
+          )
+        }}
+      </p>
+      <div
+        class="plan-switch"
+        role="group"
+        [attr.aria-label]="text('Choose a plan', 'Elige un plan')"
+      >
+        <button
+          type="button"
+          [class.chosen]="plan() === 'night'"
+          [attr.aria-pressed]="plan() === 'night'"
+          (click)="plan.set('night')"
+        >
+          {{ text('One movie', 'Una película') }}
+        </button>
+        <button
+          type="button"
+          [class.chosen]="plan() === 'club'"
+          [attr.aria-pressed]="plan() === 'club'"
+          (click)="plan.set('club')"
+        >
+          {{ text('Movie Club', 'Club de Cine') }} <span>✦</span>
+        </button>
+      </div>
+      <div class="plan-detail" aria-live="polite">
+        <div class="plan-price">
+          <div>
+            <span class="offer-kicker">{{
+              plan() === 'club' ? 'THE MOVIE CLUB' : 'THE NIGHT PASS'
+            }}</span>
+            <p>
+              <strong>{{ plan() === 'club' ? '$9.99' : '$4.99' }}</strong
+              ><span>{{
+                plan() === 'club'
+                  ? text('USD / month', 'USD / mes')
+                  : text('USD / film', 'USD / película')
+              }}</span>
+            </p>
+          </div>
+          <span class="plan-seal" aria-hidden="true">✦</span>
+        </div>
+        <ul>
+          <li>
+            {{
+              plan() === 'club'
+                ? text(
+                    'A curated selection of films each month',
+                    'Una selección de películas cada mes'
+                  )
+                : text(
+                    'One film. A 48-hour viewing window.',
+                    'Una película. 48 horas para disfrutarla.'
+                  )
+            }}
+          </li>
+          <li>
+            {{
+              text(
+                'Your personal watchlist, synced everywhere',
+                'Tu lista personal, sincronizada en todos tus dispositivos'
+              )
+            }}
+          </li>
+          <li>
+            {{
+              plan() === 'club'
+                ? text(
+                    'Monthly billing · Cancel future renewals anytime',
+                    'Cobro mensual · Cancela futuras renovaciones cuando quieras'
+                  )
+                : text('One-time payment · No subscription', 'Un solo pago · Sin suscripción')
+            }}
+          </li>
+        </ul>
+        <button
+          type="button"
+          class="payment-preview"
+          (click)="preview.set(!preview())"
+          [attr.aria-expanded]="preview()"
+        >
+          {{ text('Preview card payment', 'Ver vista previa del pago') }}
+          <span aria-hidden="true">↗</span>
+        </button>
+      </div>
+      @if (preview()) {
+        <div class="card-preview">
+          <div class="mock-card" aria-label="Demo card">
+            <span>MOVIE / DEMO</span><b>•••• &nbsp; •••• &nbsp; •••• &nbsp; 4242</b
+            ><small>{{ text('YOUR MOVIE NIGHT', 'TU NOCHE DE CINE') }} <span>◉◉</span></small>
+          </div>
+          <p>
+            {{
+              text(
+                'Illustration only. No card details collected, no charge, and no subscription starts. Checkout is not available yet.',
+                'Solo una ilustración. No recopilamos datos de tarjetas, no hay cobros ni se inicia una suscripción. El pago aún no está disponible.'
+              )
+            }}
+          </p>
+        </div>
+      }
+      <p class="offer-fine">
+        {{
+          text(
+            'Demo prices. Proposed benefits apply when paid viewing launches; film availability and final terms will be confirmed before purchase. Today’s showcase remains free.',
+            'Precios de demostración. Beneficios propuestos para el lanzamiento de pago; catálogo y condiciones finales se confirmarán antes de comprar. La muestra actual sigue siendo gratis.'
+          )
+        }}
+      </p>
+      <div class="lead-panel">
+        @if (submitted()) {
+          <div class="lead-success" role="status">
+            <span aria-hidden="true">✓</span>
+            <h4>{{ text('You’re on the list.', 'Estás en la lista.') }}</h4>
+            <p>
+              {{
+                text(
+                  'Your launch invitation is reserved. We’ll share the 20% launch offer when paid viewing is ready. No payment required.',
+                  'Tu invitación está reservada. Compartiremos la oferta de lanzamiento del 20% cuando esté listo el servicio de pago. No necesitas pagar.'
+                )
+              }}
+            </p>
+          </div>
+        } @else {
+          <div class="lead-title">
+            <h4>{{ text('First in line. 20% off.', 'Primero en la fila. 20% menos.') }}</h4>
+            <span>{{ text('LAUNCH OFFER', 'LANZAMIENTO') }}</span>
+          </div>
+          <p>
+            {{
+              text(
+                'Join the list for 20% off your first rental or first month at launch.',
+                'Únete para recibir un 20% de descuento en tu primer alquiler o primer mes al lanzamiento.'
+              )
+            }}
+          </p>
+          <form (ngSubmit)="submit()">
+            <label for="offer-email">{{ text('Your email', 'Tu correo') }}</label>
+            <input
+              id="offer-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              required
+              maxlength="254"
+              placeholder="you@example.com"
+              [(ngModel)]="email"
+            />
+            <input
+              class="honeypot"
+              name="bot-field"
+              tabindex="-1"
+              autocomplete="off"
+              aria-hidden="true"
+              [(ngModel)]="honeypot"
+            />
+            <label class="consent"
+              ><input type="checkbox" name="consent" required [(ngModel)]="consent" /><span>{{
+                text(
+                  'Email me my launch invitation and discount. My email and plan preference will be stored for this request.',
+                  'Quiero recibir mi invitación y descuento por correo. Mi correo y preferencia de plan se guardarán para esta solicitud.'
+                )
+              }}</span></label
+            >
+            @if (error()) {
+              <p role="alert" class="lead-error">{{ error() }}</p>
+            }
+            <button class="reserve-button" type="submit" [disabled]="busy()">
+              {{
+                busy()
+                  ? text('Reserving…', 'Reservando…')
+                  : text('Reserve my 20% launch offer', 'Reservar mi oferta del 20%')
+              }}
+              <span aria-hidden="true">→</span>
+            </button>
+          </form>
+          <small
+            >{{
+              text(
+                'One launch invitation. No card needed. Offer applies once to the base price; final eligibility and release date will be shared at launch. Request deletion:',
+                'Una invitación de lanzamiento. Sin tarjeta. La oferta se aplica una vez al precio base; condiciones y fecha se anunciarán al lanzamiento. Solicitar eliminación:'
+              )
+            }}
+            <a href="mailto:scriptcristian@gmail.com">scriptcristian&#64;gmail.com</a></small
+          >
+        }
+      </div>
+    </div>
+  </div>
+</dialog>

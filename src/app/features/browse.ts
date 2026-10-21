@@ -6,6 +6,7 @@ import type { I18nKey } from '../core/i18n.dict';
 import { I18nService } from '../core/i18n.service';
 import { LibraryStore } from '../core/library.store';
 import { Icon } from '../shared/icon';
+import { MembershipService } from '../core/membership.service';
 import { FilmCard } from '../shared/film-card';
 @Component({
   selector: 'luma-browse',
@@ -14,6 +15,7 @@ import { FilmCard } from '../shared/film-card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Browse {
+  readonly membership = inject(MembershipService);
   readonly route = inject(ActivatedRoute);
   readonly router = inject(Router);
   readonly store = inject(LibraryStore);

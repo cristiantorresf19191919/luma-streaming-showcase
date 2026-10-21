@@ -37,6 +37,7 @@
               : i18n.t('hero.addList')
           "
           [attr.aria-pressed]="store.saved().includes('invisibles')"
+          [disabled]="!store.canToggle()"
           (click)="store.toggle('invisibles')"
         >
           <luma-icon [name]="store.saved().includes('invisibles') ? 'check' : 'plus'" />
@@ -70,8 +71,8 @@
         @for (film of filtered(); track film.id) {
           <luma-film-card [film]="film" />
         }
-        <a class="membership-card" routerLink="/profile"
-          ><span class="section-kicker">{{
+        <button type="button" class="membership-card" (click)="membership.open()">
+          <span class="section-kicker">{{
             i18n.lang() === 'en' ? 'YOUR NEXT CHAPTER' : 'TU PRÓXIMO CAPÍTULO'
           }}</span>
           <h3>
@@ -84,14 +85,15 @@
           <p>
             {{
               i18n.lang() === 'en'
-                ? 'Create your free account and make yourself at home.'
-                : 'Crea tu cuenta gratis y siéntete en casa.'
+                ? 'One movie or a monthly ritual. Explore our upcoming plans.'
+                : 'Una película o un ritual mensual. Descubre nuestros próximos planes.'
             }}
           </p>
           <span class="membership-cta"
-            >{{ i18n.lang() === 'en' ? 'Your space' : 'Tu espacio' }}
-            <luma-icon name="arrow" /></span
-        ></a>
+            >{{ i18n.lang() === 'en' ? 'Explore plans' : 'Explorar planes' }}
+            <luma-icon name="arrow"
+          /></span>
+        </button>
       </div>
     </section>
     <section class="showcase-disclaimer" aria-labelledby="showcase-heading">
@@ -108,6 +110,9 @@
     <span class="section-kicker">{{ kicker() }}</span>
     <h1>{{ heading() }}</h1>
     <p class="muted">{{ subcopy() }}</p>
+    @if (page === 'list') {
+      <p class="muted" role="status">{{ store.statusText() }}</p>
+    }
     @if (page === 'search') {
       <div class="search-box">
         <luma-icon name="search" /><label class="sr-only" for="catalog-search">{{

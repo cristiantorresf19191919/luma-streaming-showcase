@@ -25,9 +25,12 @@ test('real Firebase signup, persistent session, account-isolated list and sign-i
     });
     await page.reload();
     await expect(page.getByRole('heading', { name: 'Welcome, MVP Viewer' })).toBeVisible();
+    await expect(page.getByText('Synced across your devices', { exact: true })).toBeVisible();
     await page.goto('/search?q=dune');
     await page.getByRole('button', { name: 'Save Dune: Part Two', exact: true }).click();
+    await expect(page.locator('.toast')).toHaveText('Added to your list');
     await page.goto('/profile');
+    await expect(page.getByText('Synced across your devices', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Sign out', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Welcome back.' })).toBeVisible();
     await page.goto('/list');
@@ -44,7 +47,11 @@ test('real Firebase signup, persistent session, account-isolated list and sign-i
       data: { email, password, returnSecureToken: true },
     });
     if (signedIn.ok()) {
-      const { idToken } = await signedIn.json();
+      const { idToken, localId } = await signedIn.json();
+      await request.delete(
+        `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/users/${localId}/watchlist/dune`,
+        { headers: { Authorization: `Bearer ${idToken}` } },
+      );
       const deleted = await request.post(endpoint('delete'), { data: { idToken } });
       expect(deleted.ok(), 'Disposable test user cleaned up').toBe(true);
     }

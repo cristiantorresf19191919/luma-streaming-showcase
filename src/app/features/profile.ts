@@ -51,11 +51,11 @@ import { Icon } from '../shared/icon';
           ><luma-icon name="bookmark" /><span
             >{{ i18n.t('profile.list')
             }}<small
-              >{{ store.saved().length }}
-              {{ text('saved on this device', 'guardadas en este dispositivo') }}</small
+              >{{ store.saved().length }} {{ text('saved films', 'películas guardadas') }}</small
             ></span
           ><luma-icon name="arrow"
         /></a>
+        <p role="status" class="muted">{{ store.statusText() }}</p>
         <a class="button primary" routerLink="/movies">{{
           text('Find your next film', 'Descubre tu próxima película')
         }}</a>

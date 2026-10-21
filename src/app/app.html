@@ -62,6 +62,55 @@
   </div>
 </header>
 <main id="main" tabindex="-1"><router-outlet /></main>
+<section class="front-row-banner" aria-label="Front Row">
+  <div>
+    <span class="section-kicker">MOVIE / FRONT ROW</span>
+    <h2>
+      {{
+        i18n.lang() === 'en'
+          ? 'Your next great movie night starts here.'
+          : 'Tu próxima gran noche de cine empieza aquí.'
+      }}
+    </h2>
+    <p>
+      {{
+        i18n.lang() === 'en'
+          ? 'Discover our upcoming passes. Join the launch list for 20% off.'
+          : 'Descubre nuestros próximos planes. Únete para recibir un 20% al lanzamiento.'
+      }}
+    </p>
+  </div>
+  <button type="button" class="button" (click)="membership.open()">
+    {{ i18n.lang() === 'en' ? 'Explore plans' : 'Explorar planes' }}
+    <span aria-hidden="true">↗</span>
+  </button>
+</section>
+<div class="install-app">
+  <button
+    type="button"
+    class="text-button"
+    (click)="installHelp.set(!installHelp())"
+    [attr.aria-expanded]="installHelp()"
+  >
+    {{
+      i18n.lang() === 'en'
+        ? '＋ Add movie to your Home Screen'
+        : '＋ Añade movie a tu pantalla de inicio'
+    }}
+  </button>
+  @if (installHelp()) {
+    <p role="status">
+      {{
+        i18n.lang() === 'en'
+          ? 'On iPhone: open in Safari → Share → Add to Home Screen → Open as Web App. On Android or desktop: use Install app in your browser menu. Saved pages work offline; sign-in, list sync and videos need a connection.'
+          : 'En iPhone: abre Safari → Compartir → Añadir a pantalla de inicio → Abrir como app web. En Android o escritorio: usa Instalar aplicación en el menú del navegador. Las páginas guardadas funcionan sin conexión; entrar, sincronizar listas y ver vídeos requiere conexión.'
+      }}
+    </p>
+  }
+</div>
+@defer (when membership.opened()) {
+  <luma-membership />
+}
 <footer class="site-footer">
   <a class="brand small" routerLink="/" aria-label="movie home">
     <span class="brand-mark" aria-hidden="true">

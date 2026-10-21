@@ -44,6 +44,7 @@ import { FilmCard } from '../shared/film-card';
             ><button
               type="button"
               class="button glass"
+              [disabled]="!store.canToggle()"
               (click)="store.toggle(film.id)"
               [attr.aria-pressed]="store.saved().includes(film.id)"
             >

@@ -36,6 +36,7 @@ import { Icon } from './icon';
           title()
         "
         [attr.aria-pressed]="store.saved().includes(film().id)"
+        [disabled]="!store.canToggle()"
         (click)="store.toggle(film().id)"
       >
         <luma-icon [name]="store.saved().includes(film().id) ? 'check' : 'plus'" />

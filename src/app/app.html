@@ -75,13 +75,13 @@
     <p>
       {{
         i18n.lang() === 'en'
-          ? 'Discover our upcoming passes. Join the launch list for 20% off.'
-          : 'Descubre nuestros próximos planes. Únete para recibir un 20% al lanzamiento.'
+          ? 'Your $9 movie night awaits. Join the launch list for 20% off.'
+          : 'Tu noche de cine por $9 te espera. Únete para recibir un 20% al lanzamiento.'
       }}
     </p>
   </div>
   <button type="button" class="button" (click)="membership.open()">
-    {{ i18n.lang() === 'en' ? 'Explore plans' : 'Explorar planes' }}
+    {{ i18n.lang() === 'en' ? 'View offer' : 'Ver oferta' }}
     <span aria-hidden="true">↗</span>
   </button>
 </section>

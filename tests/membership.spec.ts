@@ -3,15 +3,14 @@ import AxeBuilder from '@axe-core/playwright';
 test.use({ serviceWorkers: 'block' });
 test('plans, card preview and launch form work on touch and desktop', async ({ page }, info) => {
   await page.goto('/');
-  const trigger = page.getByRole('button', { name: 'Explore plans' }).first();
+  const trigger = page.getByRole('button', { name: 'View offer' }).first();
   await trigger.click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
   await expect(dialog.getByText('$9.00', { exact: true })).toBeVisible();
-  await dialog.getByRole('button', { name: 'Movie Club' }).click();
-  await expect(dialog.getByText('$9.99', { exact: true })).toBeVisible();
-  await dialog.getByRole('button', { name: 'One movie', exact: true }).click();
-  await expect(dialog.getByText('$9.00', { exact: true })).toBeVisible();
+  await expect(dialog.getByText('USD · one time', { exact: true })).toBeVisible();
+  await expect(dialog.getByRole('button', { name: 'Movie Club' })).toHaveCount(0);
+  await expect(dialog).not.toContainText(/9\.99|per month|USD \/ month|first month/);
   await dialog.getByRole('button', { name: 'Preview card payment' }).click();
   await expect(dialog.getByText(/Illustration only/)).toBeVisible();
   expect(await dialog.locator('input').count()).toBe(3); // Email, consent, honeypot; no card fields.
@@ -38,7 +37,7 @@ test('plans, card preview and launch form work on touch and desktop', async ({ p
   await expect(dialog.getByText('You’re on the list.', { exact: true })).toBeVisible();
   expect(new URLSearchParams(submitted).get('plan')).toBe('night');
   expect(new URLSearchParams(submitted).get('email')).toBe('test@example.test');
-  await dialog.getByRole('button', { name: 'Close plans' }).click();
+  await dialog.getByRole('button', { name: 'Close offer' }).click();
   await expect(dialog).not.toBeVisible();
   await expect(trigger).toBeFocused();
   await trigger.click();
@@ -49,14 +48,14 @@ test('Spanish offers and installation guidance fit narrow screens', async ({ pag
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('luma:lang', 'es'));
   await page.reload();
-  await page.getByRole('button', { name: 'Explorar planes' }).first().click();
+  await page.getByRole('button', { name: 'Ver oferta' }).first().click();
   await expect(
     page.getByRole('dialog').getByRole('heading', { name: 'Haz de una noche tu gran noche.' }),
   ).toBeVisible();
   expect(await page.getByRole('dialog').evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(
     true,
   );
-  await page.getByRole('button', { name: 'Cerrar planes' }).click();
+  await page.getByRole('button', { name: 'Cerrar oferta' }).click();
   await page.getByRole('button', { name: /Añade movie/ }).click();
   await expect(page.getByText(/En iPhone: abre Safari/)).toBeVisible();
 });
@@ -73,7 +72,7 @@ test('mobile plans and discount action fit without scrolling', async ({ page }) 
       await page.reload();
       await page
         .getByRole('button', {
-          name: lang === 'en' ? 'Explore plans' : 'Explorar planes',
+          name: lang === 'en' ? 'View offer' : 'Ver oferta',
           exact: true,
         })
         .click();
@@ -82,9 +81,7 @@ test('mobile plans and discount action fit without scrolling', async ({ page }) 
         name: lang === 'en' ? 'Get my 20% launch offer' : 'Obtener mi oferta del 20%',
       });
       await expect(cta).toBeInViewport({ ratio: 1 });
-      await expect(
-        dialog.getByRole('group', { name: lang === 'en' ? 'Choose a plan' : 'Elige un plan' }),
-      ).toBeInViewport({ ratio: 1 });
+      await expect(dialog.getByText('$9.00', { exact: true })).toBeInViewport({ ratio: 1 });
       expect(await dialog.evaluate((el) => el.scrollTop)).toBe(0);
       await dialog.screenshot({ path: `artifacts/compact-${width}-${lang}.png` });
     }

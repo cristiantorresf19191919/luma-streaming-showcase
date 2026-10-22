@@ -36,7 +36,7 @@ test('production app installs its worker and opens offline without caching priva
   await context.setOffline(true);
   await page.reload();
   await expect(page.getByRole('heading', { name: /INVISIBLE'S/ })).toBeVisible();
-  await page.getByRole('button', { name: 'Explore plans' }).first().click();
+  await page.getByRole('button', { name: 'View offer' }).first().click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await context.setOffline(false);
   expect(config.dataGroups).toEqual([]);

@@ -21,7 +21,6 @@ export class Membership {
   readonly membership = inject(MembershipService);
   readonly i18n = inject(I18nService);
   readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
-  readonly plan = signal<'night' | 'club'>('night');
   readonly preview = signal(false);
   readonly signupOpened = signal(false);
   readonly submitted = signal(false);
@@ -74,7 +73,7 @@ export class Membership {
         body: new URLSearchParams({
           'form-name': 'front-row',
           email: this.email.trim(),
-          plan: this.plan(),
+          plan: 'night',
           consent: 'Launch offer and invitation',
           'bot-field': this.honeypot,
         }),

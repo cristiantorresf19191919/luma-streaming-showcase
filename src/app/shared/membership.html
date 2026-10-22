@@ -9,7 +9,7 @@
     <button
       class="offer-close"
       type="button"
-      [attr.aria-label]="text('Close plans', 'Cerrar planes')"
+      [attr.aria-label]="text('Close offer', 'Cerrar oferta')"
       (click)="close()"
     >
       ×
@@ -52,46 +52,17 @@
       <p class="offer-muted">
         {{
           text(
-            'One unforgettable night, or a new ritual.',
-            'Una noche inolvidable o una nueva tradición.'
+            'One unforgettable night. One simple payment.',
+            'Una noche inolvidable. Un solo pago.'
           )
         }}
       </p>
-      <div
-        class="plan-switch"
-        role="group"
-        [attr.aria-label]="text('Choose a plan', 'Elige un plan')"
-      >
-        <button
-          type="button"
-          [class.chosen]="plan() === 'night'"
-          [attr.aria-pressed]="plan() === 'night'"
-          (click)="plan.set('night')"
-        >
-          {{ text('One movie', 'Una película') }}
-        </button>
-        <button
-          type="button"
-          [class.chosen]="plan() === 'club'"
-          [attr.aria-pressed]="plan() === 'club'"
-          (click)="plan.set('club')"
-        >
-          {{ text('Movie Club', 'Club de Cine') }} <span>✦</span>
-        </button>
-      </div>
       <div class="plan-detail" aria-live="polite">
         <div class="plan-price">
           <div>
-            <span class="offer-kicker">{{
-              plan() === 'club' ? 'THE MOVIE CLUB' : 'THE NIGHT PASS'
-            }}</span>
+            <span class="offer-kicker">{{ text('THE NIGHT PASS', 'TU PASE DE CINE') }}</span>
             <p>
-              <strong>{{ plan() === 'club' ? '$9.99' : '$9.00' }}</strong
-              ><span>{{
-                plan() === 'club'
-                  ? text('USD / month', 'USD / mes')
-                  : text('USD / film', 'USD / película')
-              }}</span>
+              <strong>$9.00</strong><span>{{ text('USD · one time', 'USD · un solo pago') }}</span>
             </p>
           </div>
           <span class="plan-seal" aria-hidden="true">✦</span>
@@ -99,15 +70,10 @@
         <ul>
           <li>
             {{
-              plan() === 'club'
-                ? text(
-                    'A curated selection of films each month',
-                    'Una selección de películas cada mes'
-                  )
-                : text(
-                    'One film. A 48-hour viewing window.',
-                    'Una película. 48 horas para disfrutarla.'
-                  )
+              text(
+                'One film. A 48-hour viewing window.',
+                'Una película. 48 horas para disfrutarla.'
+              )
             }}
           </li>
           <li>
@@ -119,14 +85,7 @@
             }}
           </li>
           <li>
-            {{
-              plan() === 'club'
-                ? text(
-                    'Monthly billing · Cancel future renewals anytime',
-                    'Pago mensual · Cancela futuras renovaciones'
-                  )
-                : text('One-time payment · No subscription', 'Un solo pago · Sin suscripción')
-            }}
+            {{ text('One-time payment · No subscription', 'Un solo pago · Sin suscripción') }}
           </li>
         </ul>
         <button
@@ -188,8 +147,8 @@
           <p>
             {{
               text(
-                'Join the list for 20% off your first rental or first month at launch.',
-                'Únete para recibir un 20% de descuento en tu primer alquiler o primer mes al lanzamiento.'
+                'Join the list for 20% off your first rental at launch.',
+                'Únete para recibir un 20% de descuento en tu primer alquiler al lanzamiento.'
               )
             }}
           </p>

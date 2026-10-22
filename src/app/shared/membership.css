@@ -129,35 +129,6 @@
   color: #afb6b6;
   margin: 0 0 24px;
 }
-.plan-switch {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 5px;
-  border-radius: 14px;
-  background: #080d0f;
-  gap: 4px;
-}
-.plan-switch button {
-  border: 0;
-  border-radius: 10px;
-  background: transparent;
-  color: #b4bcbc;
-  min-height: 44px;
-  font: 600 13px inherit;
-  cursor: pointer;
-  transition:
-    background-color 200ms,
-    color 200ms;
-}
-.plan-switch button.chosen {
-  background: #344243;
-  color: #fff;
-  box-shadow: 0 2px 6px #0004;
-}
-.plan-switch span {
-  color: #edc98d;
-  padding-left: 6px;
-}
 .plan-detail {
   padding: 22px 0 0;
 }
@@ -450,8 +421,7 @@ a:focus-visible {
   .card-preview {
     animation: none;
   }
-  .reserve-button,
-  .plan-switch button {
+  .reserve-button {
     transition: none;
   }
   .reserve-button:active {

@@ -7,9 +7,11 @@ test('plans, card preview and launch form work on touch and desktop', async ({ p
   await trigger.click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toBeVisible();
+  await expect(dialog.getByText('$9.00', { exact: true })).toBeVisible();
+  await dialog.getByRole('button', { name: 'Movie Club' }).click();
   await expect(dialog.getByText('$9.99', { exact: true })).toBeVisible();
   await dialog.getByRole('button', { name: 'One movie', exact: true }).click();
-  await expect(dialog.getByText('$4.99', { exact: true })).toBeVisible();
+  await expect(dialog.getByText('$9.00', { exact: true })).toBeVisible();
   await dialog.getByRole('button', { name: 'Preview card payment' }).click();
   await expect(dialog.getByText(/Illustration only/)).toBeVisible();
   expect(await dialog.locator('input').count()).toBe(3); // Email, consent, honeypot; no card fields.

@@ -100,7 +100,7 @@ Spark includes one free database and daily operation quotas. Keep billing disabl
 
 ### Front Row marketing preview
 
-The bilingual, mobile sheet proposes a **Night Pass: US$4.99 / film (48-hour rental)** or **Movie Club: US$9.99 / month**. These are explicitly demo prices and proposed future benefits. Current trailers remain free. The card is a static illustration: no card input, charge, subscription, entitlement, or payment provider is created.
+The bilingual, mobile sheet proposes a **Night Pass: US$9.00 / film (48-hour rental)** or **Movie Club: US$9.99 / month**. These are explicitly demo prices and proposed future benefits. Current trailers remain free. The card is a static illustration: no card input, charge, subscription, entitlement, or payment provider is created.
 
 The launch list offers 20% off the first rental or first month when paid viewing launches. `front-row` captures email, plan preference, and explicit consent through Netlify Forms (with a honeypot), backed by the static definition in `public/__forms.html`. Form detection is enabled on the existing `moviesdiamond` project. View/export leads in Netlify → Forms → front-row. No marketing email is automatically sent. Fulfil the launch invitation and discount before enabling paid purchases; final catalogue rights, terms and checkout remain future work. The form includes a deletion contact. Never put payment details in form submissions.
 

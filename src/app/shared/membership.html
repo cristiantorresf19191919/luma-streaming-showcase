@@ -114,7 +114,7 @@
             {{
               text(
                 'Your personal watchlist, synced everywhere',
-                'Tu lista personal, sincronizada en todos tus dispositivos'
+                'Tu lista, en todos tus dispositivos'
               )
             }}
           </li>
@@ -123,7 +123,7 @@
               plan() === 'club'
                 ? text(
                     'Monthly billing · Cancel future renewals anytime',
-                    'Cobro mensual · Cancela futuras renovaciones cuando quieras'
+                    'Pago mensual · Cancela futuras renovaciones'
                   )
                 : text('One-time payment · No subscription', 'Un solo pago · Sin suscripción')
             }}
@@ -155,14 +155,17 @@
           </p>
         </div>
       }
-      <p class="offer-fine">
-        {{
-          text(
-            'Demo prices. Proposed benefits apply when paid viewing launches; film availability and final terms will be confirmed before purchase. Today’s showcase remains free.',
-            'Precios de demostración. Beneficios propuestos para el lanzamiento de pago; catálogo y condiciones finales se confirmarán antes de comprar. La muestra actual sigue siendo gratis.'
-          )
-        }}
-      </p>
+      <details class="plan-terms">
+        <summary>{{ text('Preview only · Offer details', 'Vista previa · Condiciones') }}</summary>
+        <p class="offer-fine">
+          {{
+            text(
+              'Demo prices. Proposed benefits apply when paid viewing launches; film availability and final terms will be confirmed before purchase. Today’s showcase remains free.',
+              'Precios de demostración. Beneficios propuestos para el lanzamiento de pago; catálogo y condiciones finales se confirmarán antes de comprar. La muestra actual sigue siendo gratis.'
+            )
+          }}
+        </p>
+      </details>
       <div class="lead-panel">
         @if (submitted()) {
           <div class="lead-success" role="status">
@@ -179,7 +182,7 @@
           </div>
         } @else {
           <div class="lead-title">
-            <h4>{{ text('First in line. 20% off.', 'Primero en la fila. 20% menos.') }}</h4>
+            <h4>{{ text('First in line. 20% off.', 'Tu estreno. 20% menos.') }}</h4>
             <span>{{ text('LAUNCH OFFER', 'LANZAMIENTO') }}</span>
           </div>
           <p>
@@ -190,56 +193,73 @@
               )
             }}
           </p>
-          <form (ngSubmit)="submit()">
-            <label for="offer-email">{{ text('Your email', 'Tu correo') }}</label>
-            <input
-              id="offer-email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              inputmode="email"
-              required
-              maxlength="254"
-              placeholder="you@example.com"
-              [(ngModel)]="email"
-            />
-            <input
-              class="honeypot"
-              name="bot-field"
-              tabindex="-1"
-              autocomplete="off"
-              aria-hidden="true"
-              [(ngModel)]="honeypot"
-            />
-            <label class="consent"
-              ><input type="checkbox" name="consent" required [(ngModel)]="consent" /><span>{{
-                text(
-                  'Email me my launch invitation and discount. My email and plan preference will be stored for this request.',
-                  'Quiero recibir mi invitación y descuento por correo. Mi correo y preferencia de plan se guardarán para esta solicitud.'
-                )
-              }}</span></label
-            >
-            @if (error()) {
-              <p role="alert" class="lead-error">{{ error() }}</p>
-            }
-            <button class="reserve-button" type="submit" [disabled]="busy()">
-              {{
-                busy()
-                  ? text('Reserving…', 'Reservando…')
-                  : text('Reserve my 20% launch offer', 'Reservar mi oferta del 20%')
-              }}
-              <span aria-hidden="true">→</span>
-            </button>
-          </form>
-          <small
-            >{{
-              text(
-                'One launch invitation. No card needed. Offer applies once to the base price; final eligibility and release date will be shared at launch. Request deletion:',
-                'Una invitación de lanzamiento. Sin tarjeta. La oferta se aplica una vez al precio base; condiciones y fecha se anunciarán al lanzamiento. Solicitar eliminación:'
-              )
-            }}
-            <a href="mailto:scriptcristian@gmail.com">scriptcristian&#64;gmail.com</a></small
+          <button
+            type="button"
+            class="reserve-button mobile-discount"
+            [class.expanded]="signupOpened()"
+            [attr.aria-expanded]="signupOpened()"
+            aria-controls="launch-signup"
+            (click)="signupOpened.set(!signupOpened())"
           >
+            {{
+              signupOpened()
+                ? text('Hide email form', 'Ocultar formulario')
+                : text('Get my 20% launch offer', 'Obtener mi oferta del 20%')
+            }}
+            <span aria-hidden="true">{{ signupOpened() ? '−' : '→' }}</span>
+          </button>
+          <div id="launch-signup" class="signup-fields" [class.expanded]="signupOpened()">
+            <form (ngSubmit)="submit()">
+              <label for="offer-email">{{ text('Your email', 'Tu correo') }}</label>
+              <input
+                id="offer-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                inputmode="email"
+                required
+                maxlength="254"
+                placeholder="you@example.com"
+                [(ngModel)]="email"
+              />
+              <input
+                class="honeypot"
+                name="bot-field"
+                tabindex="-1"
+                autocomplete="off"
+                aria-hidden="true"
+                [(ngModel)]="honeypot"
+              />
+              <label class="consent"
+                ><input type="checkbox" name="consent" required [(ngModel)]="consent" /><span>{{
+                  text(
+                    'Email me my launch invitation and discount. My email and plan preference will be stored for this request.',
+                    'Quiero recibir mi invitación y descuento por correo. Mi correo y preferencia de plan se guardarán para esta solicitud.'
+                  )
+                }}</span></label
+              >
+              @if (error()) {
+                <p role="alert" class="lead-error">{{ error() }}</p>
+              }
+              <button class="reserve-button" type="submit" [disabled]="busy()">
+                {{
+                  busy()
+                    ? text('Reserving…', 'Reservando…')
+                    : text('Reserve my 20% launch offer', 'Reservar mi oferta del 20%')
+                }}
+                <span aria-hidden="true">→</span>
+              </button>
+            </form>
+            <small
+              >{{
+                text(
+                  'One launch invitation. No card needed. Offer applies once to the base price; final eligibility and release date will be shared at launch. Request deletion:',
+                  'Una invitación de lanzamiento. Sin tarjeta. La oferta se aplica una vez al precio base; condiciones y fecha se anunciarán al lanzamiento. Solicitar eliminación:'
+                )
+              }}
+              <a href="mailto:scriptcristian@gmail.com">scriptcristian&#64;gmail.com</a></small
+            >
+          </div>
         }
       </div>
     </div>

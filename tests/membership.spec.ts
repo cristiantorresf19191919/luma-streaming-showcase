@@ -13,6 +13,8 @@ test('plans, card preview and launch form work on touch and desktop', async ({ p
   await dialog.getByRole('button', { name: 'Preview card payment' }).click();
   await expect(dialog.getByText(/Illustration only/)).toBeVisible();
   expect(await dialog.locator('input').count()).toBe(3); // Email, consent, honeypot; no card fields.
+  const discount = dialog.getByRole('button', { name: 'Get my 20% launch offer' });
+  if (await discount.isVisible()) await discount.click();
   await dialog.getByLabel('Your email', { exact: true }).fill('test@example.test');
   await dialog.getByRole('checkbox').check();
   await page.route('**/__forms.html', (route) => route.fulfill({ status: 503 }));
@@ -46,11 +48,43 @@ test('Spanish offers and installation guidance fit narrow screens', async ({ pag
   await page.evaluate(() => localStorage.setItem('luma:lang', 'es'));
   await page.reload();
   await page.getByRole('button', { name: 'Explorar planes' }).first().click();
-  await expect(page.getByRole('dialog').getByText('Tu lugar. A tu manera.')).toBeVisible();
+  await expect(
+    page.getByRole('dialog').getByRole('heading', { name: 'Haz de una noche tu gran noche.' }),
+  ).toBeVisible();
   expect(await page.getByRole('dialog').evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(
     true,
   );
   await page.getByRole('button', { name: 'Cerrar planes' }).click();
   await page.getByRole('button', { name: /Añade movie/ }).click();
   await expect(page.getByText(/En iPhone: abre Safari/)).toBeVisible();
+});
+
+test('mobile plans and discount action fit without scrolling', async ({ page }) => {
+  for (const [width, height] of [
+    [390, 844],
+    [375, 667],
+  ]) {
+    await page.setViewportSize({ width, height });
+    for (const lang of ['en', 'es']) {
+      await page.goto('/');
+      await page.evaluate((lang) => localStorage.setItem('luma:lang', lang), lang);
+      await page.reload();
+      await page
+        .getByRole('button', {
+          name: lang === 'en' ? 'Explore plans' : 'Explorar planes',
+          exact: true,
+        })
+        .click();
+      const dialog = page.getByRole('dialog');
+      const cta = dialog.getByRole('button', {
+        name: lang === 'en' ? 'Get my 20% launch offer' : 'Obtener mi oferta del 20%',
+      });
+      await expect(cta).toBeInViewport({ ratio: 1 });
+      await expect(
+        dialog.getByRole('group', { name: lang === 'en' ? 'Choose a plan' : 'Elige un plan' }),
+      ).toBeInViewport({ ratio: 1 });
+      expect(await dialog.evaluate((el) => el.scrollTop)).toBe(0);
+      await dialog.screenshot({ path: `artifacts/compact-${width}-${lang}.png` });
+    }
+  }
 });

@@ -23,6 +23,7 @@ export class Membership {
   readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
   readonly plan = signal<'night' | 'club'>('club');
   readonly preview = signal(false);
+  readonly signupOpened = signal(false);
   readonly submitted = signal(false);
   readonly busy = signal(false);
   readonly error = signal('');

@@ -344,7 +344,7 @@
   opacity: 0.65;
   cursor: wait;
 }
-.lead-panel > small {
+.signup-fields > small {
   display: block;
   font-size: 9px;
   line-height: 1.6;
@@ -405,7 +405,7 @@ a:focus-visible {
     grid-template-columns: 1fr;
   }
   .offer-story {
-    padding: 26px 24px 20px;
+    padding: 18px 20px 14px;
     border-radius: 25px 25px 0 0;
   }
   .offer-story > .offer-kicker {
@@ -418,8 +418,8 @@ a:focus-visible {
     display: none;
   }
   .story-copy h2 {
-    font-size: 36px;
-    margin: 18px 0 8px;
+    font-size: 28px;
+    margin: 10px 40px 0 0;
   }
   .story-copy h2 br {
     display: none;
@@ -427,17 +427,8 @@ a:focus-visible {
   .story-copy h2 em {
     margin-left: 8px;
   }
-  .story-copy p {
-    font-size: 12px;
-    margin: 0;
-    max-width: 280px;
-  }
   .offer-content {
-    padding: 24px 24px calc(24px + env(safe-area-inset-bottom));
-  }
-  .offer-content h3 {
-    font-size: 28px;
-    margin-top: 14px;
+    padding: 14px 20px calc(18px + env(safe-area-inset-bottom));
   }
   .offer-close {
     position: sticky;
@@ -497,4 +488,73 @@ a:focus-visible {
     grid-column: 1;
     grid-row: 2;
   }
+}
+
+.mobile-discount {
+  display: none;
+}
+@media (max-width: 680px) {
+  .story-copy p,
+  .offer-content h3,
+  .offer-muted {
+    display: none;
+  }
+  .preview-label {
+    margin-bottom: 12px;
+    padding: 5px 9px;
+  }
+  .plan-detail {
+    padding-top: 12px;
+  }
+  .plan-price strong {
+    font-size: 34px;
+  }
+  .plan-price p {
+    margin: 4px 0;
+  }
+  .plan-detail ul {
+    margin: 8px 0 12px;
+    gap: 6px;
+    line-height: 1.4;
+  }
+  .offer-fine {
+    margin: 8px 0 12px;
+    line-height: 1.5;
+  }
+  .lead-panel {
+    padding-top: 12px;
+  }
+  .lead-panel p {
+    margin: 6px 0 12px;
+    line-height: 1.5;
+  }
+  .mobile-discount {
+    display: flex;
+  }
+  .mobile-discount.expanded {
+    background: #263333;
+    color: #edc98d;
+    margin-bottom: 12px;
+  }
+  .signup-fields {
+    display: none;
+  }
+  .signup-fields.expanded {
+    display: block;
+  }
+}
+
+.plan-terms {
+  color: #b8c3bf;
+  font-size: 11px;
+  margin: 4px 0 8px;
+}
+.plan-terms summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+}
+.plan-terms summary:focus-visible {
+  outline: 2px solid #edc98d;
+  outline-offset: 2px;
 }

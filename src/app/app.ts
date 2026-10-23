@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal, HostListener } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { InstallPrompt } from './shared/install-prompt';
+import { AnalyticsService } from './core/analytics.service';
 import { Membership } from './shared/membership';
 import { MembershipService } from './core/membership.service';
 import { Icon } from './shared/icon';
@@ -8,11 +10,12 @@ import { AuthService } from './core/auth.service';
 import { LibraryStore } from './core/library.store';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Icon, Membership],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Icon, Membership, InstallPrompt],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
+  readonly analytics = inject(AnalyticsService);
   readonly installHelp = signal(false);
   readonly membership = inject(MembershipService);
   readonly auth = inject(AuthService);

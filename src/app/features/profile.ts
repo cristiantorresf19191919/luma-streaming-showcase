@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { I18nService } from '../core/i18n.service';
 import { LibraryStore } from '../core/library.store';
 import { AuthService } from '../core/auth.service';
@@ -47,6 +47,24 @@ import { Icon } from '../shared/icon';
           {{ text('Welcome,', 'Hola,') }} {{ user.displayName || user.email?.split('@')?.[0] }}
         </h2>
         <p class="muted account-email">{{ user.email }}</p>
+        @if (!user.emailVerified) {
+          <div class="auth-message">
+            <p>
+              {{
+                text(
+                  'Verify your email before purchasing a film.',
+                  'Verifica tu correo antes de comprar una película.'
+                )
+              }}
+            </p>
+            <button class="text-button" [disabled]="busy()" (click)="run('verify')">
+              {{ text('Send verification email', 'Enviar correo de verificación') }}
+            </button>
+            <button class="text-button" [disabled]="busy()" (click)="run('refresh')">
+              {{ text('I have verified my email', 'Ya verifiqué mi correo') }}
+            </button>
+          </div>
+        }
         <a class="profile-row" routerLink="/list"
           ><luma-icon name="bookmark" /><span
             >{{ i18n.t('profile.list')
@@ -204,6 +222,8 @@ import { Icon } from '../shared/icon';
   </section>`,
 })
 export class Profile {
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly auth = inject(AuthService);
   readonly store = inject(LibraryStore);
   readonly i18n = inject(I18nService);
@@ -230,7 +250,25 @@ export class Profile {
     this.message.set('');
     this.error.set(false);
     try {
-      if (action === 'google') await this.auth.google();
+      if (action === 'verify') {
+        await this.auth.verifyEmail();
+        this.message.set(
+          this.text(
+            'Verification email sent. Check your inbox.',
+            'Correo de verificación enviado. Revisa tu bandeja.',
+          ),
+        );
+      } else if (action === 'refresh') {
+        await this.auth.refreshUser();
+        this.message.set(
+          this.auth.user()?.emailVerified
+            ? this.text('Email verified. You’re ready.', 'Correo verificado. Todo listo.')
+            : this.text(
+                'Not verified yet. Open the link in your email.',
+                'Aún no está verificado. Abre el enlace de tu correo.',
+              ),
+        );
+      } else if (action === 'google') await this.auth.google();
       else if (action === 'logout') await this.auth.logout();
       else if (action === 'reset') {
         await this.auth.reset(this.email.trim());
@@ -247,6 +285,13 @@ export class Profile {
           action === 'signup' ? this.name : undefined,
         );
       this.password = '';
+      const returnTo = this.route.snapshot.queryParamMap.get('returnTo');
+      if (
+        ['google', 'signin', 'signup'].includes(action) &&
+        returnTo &&
+        /^\/title\/(invisibles|dune)$/.test(returnTo)
+      )
+        await this.router.navigateByUrl(returnTo);
     } catch (error) {
       this.error.set(true);
       const code = (error as { code?: string }).code;

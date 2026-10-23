@@ -46,7 +46,9 @@
     </div>
     <div class="offer-content">
       <span class="preview-label">{{
-        text('COMING SOON · PLAN PREVIEW', 'PRÓXIMAMENTE · VISTA PREVIA')
+        commerce.available()
+          ? text('YOUR NIGHT PASS', 'TU PASE DE CINE')
+          : text('COMING SOON · PLAN PREVIEW', 'PRÓXIMAMENTE · VISTA PREVIA')
       }}</span>
       <h3>{{ text('Your seat. Your way.', 'Tu lugar. A tu manera.') }}</h3>
       <p class="offer-muted">
@@ -88,17 +90,28 @@
             {{ text('One-time payment · No subscription', 'Un solo pago · Sin suscripción') }}
           </li>
         </ul>
-        <button
-          type="button"
-          class="payment-preview"
-          (click)="preview.set(!preview())"
-          [attr.aria-expanded]="preview()"
-        >
-          {{ text('Preview card payment', 'Ver vista previa del pago') }}
-          <span aria-hidden="true">↗</span>
-        </button>
+        @if (commerce.available()) {
+          <button
+            type="button"
+            class="reserve-button"
+            [disabled]="commerce.busy()"
+            (click)="checkout()"
+          >
+            {{ text('Watch Invisible’s for $9', 'Ver Invisible’s por $9') }}
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="payment-preview"
+            (click)="preview.set(!preview())"
+            [attr.aria-expanded]="preview()"
+          >
+            {{ text('Preview card payment', 'Ver vista previa del pago') }}
+            <span aria-hidden="true">↗</span>
+          </button>
+        }
       </div>
-      @if (preview()) {
+      @if (preview() && !commerce.available()) {
         <div class="card-preview">
           <div class="mock-card" aria-label="Demo card">
             <span>MOVIE / DEMO</span><b>•••• &nbsp; •••• &nbsp; •••• &nbsp; 4242</b
@@ -115,13 +128,24 @@
         </div>
       }
       <details class="plan-terms">
-        <summary>{{ text('Preview only · Offer details', 'Vista previa · Condiciones') }}</summary>
+        <summary>
+          {{
+            commerce.available()
+              ? text('One payment · Rental details', 'Un pago · Condiciones de alquiler')
+              : text('Preview only · Offer details', 'Vista previa · Condiciones')
+          }}
+        </summary>
         <p class="offer-fine">
           {{
-            text(
-              'Demo prices. Proposed benefits apply when paid viewing launches; film availability and final terms will be confirmed before purchase. Today’s showcase remains free.',
-              'Precios de demostración. Beneficios propuestos para el lanzamiento de pago; catálogo y condiciones finales se confirmarán antes de comprar. La muestra actual sigue siendo gratis.'
-            )
+            commerce.available()
+              ? text(
+                  'One film, one payment. Your 48 hours start when you choose Start rental in Purchased, not at checkout. A receipt is available in your library. No subscription.',
+                  'Una película, un pago. Tus 48 horas comienzan al elegir Iniciar alquiler en Compradas, no al pagar. El recibo estará en tu biblioteca. Sin suscripción.'
+                )
+              : text(
+                  'Demo prices. Proposed benefits apply when paid viewing launches; film availability and final terms will be confirmed before purchase. Today’s showcase remains free.',
+                  'Precios de demostración. Beneficios propuestos para el lanzamiento de pago; catálogo y condiciones finales se confirmarán antes de comprar. La muestra actual sigue siendo gratis.'
+                )
           }}
         </p>
       </details>

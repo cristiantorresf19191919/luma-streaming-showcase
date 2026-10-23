@@ -109,3 +109,44 @@ The launch list offers 20% off the first rental when paid viewing launches. `fro
 The production build uses Angular's service worker, a standalone manifest, maskable PNG icons, and an Apple touch icon. On iPhone: Safari → Share → Add to Home Screen → Open as Web App. Browser installation instructions are available in the footer. The app shell/fonts are cached; posters are cached on demand. Video files, auth requests, Firestore responses, and lead submissions are not cached by the service worker. Sign-in, fresh sync, form submission and streaming require a connection. New app versions activate on a subsequent reload after download. `scripts/configure-sw.mjs` excludes only the edge-transformed HTML shell from content-hash validation, while retaining it in the versioned prefetch cache. Netlify injects markup after builds, so its served HTML differs from Angular’s source hash; all scripts, styles and other asset hashes remain validated.
 
 `E2E_LIVE_AUTH=1 npm test -- --workers=2` exercises real disposable accounts, cross-device additions/removals, one-time migration and denied cross-account reads/writes, with cleanup. Normal `npm test` also covers mobile/desktop offers, bilingual content, accessibility, form failure/retry and existing browsing flows. Do not run multiple Playwright processes against the same output folder/server concurrently.
+
+## Rental, progress, launch email and analytics
+
+The site still runs on the existing Netlify project and Firebase Spark plan. Nothing in this change upgrades billing or enables live charging. Paid viewing requires a licensed full film and configured external services; setting environment variable names without working credentials is not activation. Stripe transaction fees and video delivery costs must be reviewed before launch; the app cannot promise unlimited free streaming.
+
+### Customer experience
+
+- Library has My List, Continue watching, and Purchased. Signed-in playback positions sync through Firestore, throttled to one write per 15 seconds plus pause/end. Guests save locally. Account changes never copy progress to another user.
+- Checkout is a $9 USD **one-time rental** of Invisible’s. No subscription. A verified email is required. Customers with active access cannot start another checkout for the same film.
+- Stripe's signed webhook, not the return URL, creates access and the receipt link. Checkout success can take a few seconds to appear. Refunds/disputes revoke access.
+- The 48-hour clock starts only after the customer explicitly chooses **Start rental** in Purchased. Pausing, reloading and changing devices do not extend it.
+- Mux signed HLS plays natively on Safari/iPhone and through hls.js elsewhere. Native controls provide fullscreen and any captions delivered in the HLS manifest. The showcase only includes sample-clip captions; Invisible’s full film, actual cast and subtitle tracks must be supplied. No invented subtitles are advertised.
+- The Home Screen prompt appears after 45 seconds and two page visits, avoids playback and open dialogs, and remembers dismissal for seven days. Video still requires a connection.
+
+### Activation checklist (not yet completed)
+
+1. Confirm Stripe, the email service (Resend integration prepared), and licensed full-film hosting (Mux integration prepared). Upload a **signed-policy** Mux asset; do not create a public playback ID. Add genuine captions to its HLS manifest and confirm cast/language details in the catalog.
+2. Use a Firebase service account for project `movies-diamond-1988d` with only required Firestore and Firebase Auth permissions. Store its JSON as `FIREBASE_SERVICE_ACCOUNT_JSON` in Netlify's **Functions** environment scope. Never commit it or expose it in browser config.
+3. Add the server variables listed in `.env.example` to Netlify. Keep test/live Stripe keys, customer IDs, coupons and webhook secrets separate; use an isolated Firebase test project during sandbox testing. Set `SITE_URL` to the exact test or production origin; cross-origin checkout is rejected.
+4. Register Stripe webhook `https://moviesdiamond.netlify.app/.netlify/functions/stripe-webhook` for `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `charge.refunded`, and `charge.dispute.created`. Copy its signing secret into Netlify. Enable payment receipts in Stripe and verify delivery with a sandbox purchase.
+5. Verify an email sending domain in Resend and supply `EMAIL_FROM` (e.g. `movie <hello@your-owned-domain>`), `RESEND_API_KEY`, and a Netlify token with submission read access in `NETLIFY_FORMS_TOKEN`. The `submission-created` event function verifies each submission against the Netlify API and accepts only the existing `front-row` form with consent. It creates a customer-restricted, one-use 20% coupon and branded bilingual email. The same verified email must be used at checkout. At a $9 base price, 20% off is $7.20. The UI promises a reserved invitation, not delivery before the services are configured.
+6. Redeploy after configuration changes. Test full-price and discounted sandbox purchases; webhook retry; checkout cancellation; receipt delivery; explicit rental start; two devices; expiration; refund; and iPhone Safari fullscreen/captions with the actual asset. Then use live credentials and set `COMMERCE_ENABLED=true`. `/.netlify/functions/commerce-status` should return `{"checkout":true}`. No secret values are exposed by this endpoint.
+
+Existing leads remain in Netlify Forms. They are **not automatically backfilled** when email delivery is enabled. An administrator can replay selected verified submission IDs through the event function from a trusted local environment after loading server credentials. The handler accepts `{body: JSON.stringify({payload:{id: submissionId}})}` and revalidates the lead through Netlify. Do not replay arbitrary emails. Firestore `discountLeads` records delivery state and prevents repeat sends; failed deliveries need monitoring/retry. Stripe and Resend idempotency reduce duplicate requests, but their retention is finite. Delivery failures return 500, while missing configuration intentionally returns 200 without sending.
+
+### Measurement and access controls
+
+Set `GA_MEASUREMENT_ID` in Netlify's **Builds** scope and rebuild to enable the optional usage-analytics control. No analytics script loads until the visitor opts in. Events: `trailer_view`, `discount_request`, `checkout_start`, `purchase_confirmed`, `install_prompt`, `app_installed`. No email or payment fields are sent. Browser purchase confirmation is deduplicated on the device and matched to an actual purchase record. It is not a financial ledger and misses customers who do not return or opt in. Authoritative verified purchases are recorded by the webhook in Firestore `purchaseEvents`; Stripe remains the financial source of truth.
+
+Firestore rules allow each user to read only their own purchases and read/write their own validated playback positions. Clients cannot write purchases, checkout locks, discount leads, or purchase events. The service worker does not cache API responses or videos. Mux signed URLs expire at rental end; they are bearer links, not DRM. An already-issued link can remain usable until expiration even after a refund, and browser buffering may outlast a server expiry. Stronger anti-sharing or immediate URL revocation needs a separate video-security design before promising it to customers.
+
+### Verification commands
+
+```sh
+npm run build
+npm test
+npm run test:server
+E2E_LIVE_AUTH=1 npm test -- tests/progress-live.spec.ts --project=desktop --workers=1
+```
+
+The live test creates and deletes disposable accounts, verifies two-session progress updates, and checks that another user cannot read/write progress or forge purchases. Run Playwright suites sequentially to avoid shared artifact-directory collisions. Real payment/email/video acceptance remains pending external credentials and assets. For production PWA checks, set `E2E_PWA=1` and `PLAYWRIGHT_BASE_URL` to the exact deploy URL.

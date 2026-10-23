@@ -7,6 +7,8 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { CommerceService } from '../core/commerce.service';
+import { AnalyticsService } from '../core/analytics.service';
 import { FormsModule } from '@angular/forms';
 import { MembershipService } from '../core/membership.service';
 import { I18nService } from '../core/i18n.service';
@@ -18,6 +20,12 @@ import { I18nService } from '../core/i18n.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Membership {
+  readonly commerce = inject(CommerceService);
+  async checkout() {
+    this.close();
+    await this.commerce.checkout('invisibles');
+  }
+  private readonly analytics = inject(AnalyticsService);
   readonly membership = inject(MembershipService);
   readonly i18n = inject(I18nService);
   readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
@@ -80,6 +88,7 @@ export class Membership {
       });
       if (!response.ok) throw new Error('submission');
       this.submitted.set(true);
+      this.analytics.track('discount_request');
       this.email = '';
     } catch {
       this.error.set(

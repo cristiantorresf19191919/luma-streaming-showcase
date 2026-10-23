@@ -1,6 +1,22 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    match /users/{uid}/purchases/{purchaseId} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+    match /users/{uid}/progress/{key} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['filmId', 'mode', 'position', 'duration', 'updatedAt'])
+        && request.resource.data.filmId in ['invisibles', 'dune']
+        && request.resource.data.mode in ['trailer', 'film']
+        && key == request.resource.data.filmId + '-' + request.resource.data.mode
+        && request.resource.data.position is number && request.resource.data.position >= 0
+        && request.resource.data.duration is number && request.resource.data.duration > 0 && request.resource.data.duration < 86400
+        && request.resource.data.position <= request.resource.data.duration
+        && request.resource.data.updatedAt is number && request.resource.data.updatedAt >= 0 && request.resource.data.updatedAt <= request.time.toMillis() + 60000;
+    }
     match /users/{uid}/watchlist/{filmId} {
       allow read, delete: if request.auth != null && request.auth.uid == uid;
       allow create, update: if request.auth != null && request.auth.uid == uid

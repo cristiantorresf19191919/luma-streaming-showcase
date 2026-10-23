@@ -15,7 +15,8 @@
     "pretest": "node scripts/configure-env.mjs",
     "pretest:ui": "node scripts/configure-env.mjs",
     "prewatch": "node scripts/configure-env.mjs",
-    "postbuild": "node scripts/configure-sw.mjs"
+    "postbuild": "node scripts/configure-sw.mjs",
+    "test:server": "node --test tests-server/*.test.mjs"
   },
   "private": true,
   "packageManager": "npm@11.11.1",
@@ -28,7 +29,10 @@
     "@angular/router": "22.2.3",
     "@angular/service-worker": "^22.2.3",
     "firebase": "^13.1.0",
+    "firebase-admin": "^14.5.0",
+    "hls.js": "^1.7.3",
     "rxjs": "~7.8.0",
+    "stripe": "^23.0.1",
     "tslib": "^2.3.0"
   },
   "devDependencies": {

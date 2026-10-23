@@ -7,6 +7,8 @@ import type { I18nKey } from '../core/i18n.dict';
 import { I18nService } from '../core/i18n.service';
 import { LibraryStore } from '../core/library.store';
 import { Icon } from '../shared/icon';
+import { CommerceService } from '../core/commerce.service';
+import { MembershipService } from '../core/membership.service';
 import { FilmCard } from '../shared/film-card';
 @Component({
   selector: 'luma-detail',
@@ -29,11 +31,13 @@ import { FilmCard } from '../shared/film-card';
           ><span class="section-kicker">{{ i18n.t('detail.kicker') }}</span>
           <h1>{{ titleOf(film) }}</h1>
           <div class="film-meta">
-            <strong>{{ i18n.t('detail.acclaimed') }}</strong
+            <strong>{{
+              i18n.lang() === 'en' ? 'Discover the story' : 'Descubre la historia'
+            }}</strong
             ><span>{{ film.year }}</span
             ><span class="rating">{{ film.rating }}</span
             ><span>{{ film.duration }}</span
-            ><span class="quality">4K</span>
+            ><span class="quality">TRAILER</span>
           </div>
           <p class="detail-description">{{ descriptionOf(film) }}</p>
           <div class="actions">
@@ -53,6 +57,43 @@ import { FilmCard } from '../shared/film-card';
               }}
             </button>
           </div>
+          @if (film.id === 'invisibles') {
+            <div class="rental-offer">
+              <span class="section-kicker">{{
+                i18n.lang() === 'en' ? 'YOUR NIGHT PASS' : 'TU PASE DE CINE'
+              }}</span>
+              <h2>
+                $9 <small>USD · {{ i18n.lang() === 'en' ? 'one time' : 'un solo pago' }}</small>
+              </h2>
+              <p>
+                {{
+                  i18n.lang() === 'en'
+                    ? 'Your 48 hours begin when you choose Start rental in Purchased—not at checkout.'
+                    : 'Tus 48 horas comienzan al elegir Iniciar alquiler en Compradas, no al pagar.'
+                }}
+              </p>
+              @if (commerce.available()) {
+                <button
+                  class="button primary"
+                  [disabled]="commerce.busy()"
+                  (click)="commerce.checkout(film.id)"
+                >
+                  {{ i18n.lang() === 'en' ? 'Watch for $9' : 'Ver por $9' }}
+                </button>
+              } @else {
+                <button class="button glass" (click)="membership.open()">
+                  {{
+                    i18n.lang() === 'en'
+                      ? 'Coming soon · Get launch discount'
+                      : 'Próximamente · Obtener descuento'
+                  }}
+                </button>
+              }
+              @if (commerce.error()) {
+                <p role="alert">{{ commerce.error() }}</p>
+              }
+            </div>
+          }
           <div class="detail-credits">
             <p>
               <span>{{ i18n.t('detail.directed') }}</span
@@ -60,11 +101,29 @@ import { FilmCard } from '../shared/film-card';
             </p>
             <p>
               <span>{{ i18n.t('detail.starring') }}</span
-              >{{ film.cast }}
+              >{{
+                film.cast === 'Coming soon'
+                  ? i18n.lang() === 'en'
+                    ? 'Cast to be announced'
+                    : 'Reparto por anunciar'
+                  : film.cast
+              }}
             </p>
             <p>
               <span>{{ i18n.t('detail.genre') }}</span
               >{{ genreLabel(film.genre) }}
+            </p>
+            <p>
+              <span>{{ i18n.lang() === 'en' ? 'Subtitles' : 'Subtítulos' }}</span
+              >{{
+                film.id === 'dune'
+                  ? i18n.lang() === 'en'
+                    ? 'English captions for the sample clip'
+                    : 'Subtítulos en inglés para el clip de muestra'
+                  : i18n.lang() === 'en'
+                    ? 'Not available for this trailer. Full-film languages to be confirmed.'
+                    : 'No disponibles para este tráiler. Idiomas de la película por confirmar.'
+              }}
             </p>
           </div>
         </div>
@@ -116,6 +175,8 @@ import { FilmCard } from '../shared/film-card';
   `,
 })
 export class Detail {
+  readonly commerce = inject(CommerceService);
+  readonly membership = inject(MembershipService);
   readonly params = toSignal(inject(ActivatedRoute).paramMap);
   readonly film = computed(() => FILMS.find((f) => f.id === this.params()?.get('id')));
   readonly related = computed(() =>

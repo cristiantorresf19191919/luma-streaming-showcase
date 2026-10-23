@@ -111,6 +111,22 @@
 @defer (when membership.opened()) {
   <luma-membership />
 }
+<luma-install-prompt />
+@if (analytics.configured) {
+  <div class="analytics-choice">
+    <label
+      ><input
+        type="checkbox"
+        [checked]="analytics.enabled()"
+        (change)="analytics.setConsent($any($event.target).checked)"
+      />{{
+        i18n.lang() === 'en'
+          ? 'Help improve movie with optional usage analytics'
+          : 'Ayuda a mejorar movie con estadísticas de uso opcionales'
+      }}</label
+    >
+  </div>
+}
 <footer class="site-footer">
   <a class="brand small" routerLink="/" aria-label="movie home">
     <span class="brand-mark" aria-hidden="true">

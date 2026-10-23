@@ -4,4 +4,4 @@ const fields = { apiKey: 'FIREBASE_API_KEY', authDomain: 'FIREBASE_AUTH_DOMAIN',
 const firebase = Object.fromEntries(Object.entries(fields).map(([key, name]) => [key, process.env[name] || '']));
 if (process.env.NETLIFY && Object.values(firebase).some(value => !value)) throw new Error('Missing Firebase build environment variables');
 mkdirSync('src/environments', { recursive: true });
-writeFileSync('src/environments/firebase.generated.ts', `// Generated from local or Netlify build environment.\nexport const firebaseConfig = ${JSON.stringify(firebase, null, 2)};\n`);
+writeFileSync('src/environments/firebase.generated.ts', `// Generated from local or Netlify build environment.\nexport const analyticsId = ${JSON.stringify(process.env.GA_MEASUREMENT_ID || "")};\nexport const firebaseConfig = ${JSON.stringify(firebase, null, 2)};\n`);

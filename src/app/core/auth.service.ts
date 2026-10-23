@@ -8,6 +8,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   sendPasswordResetEmail,
+  sendEmailVerification,
+  reload,
   signOut,
   updateProfile,
   type Auth,
@@ -54,6 +56,18 @@ export class AuthService {
   async reset(email: string): Promise<void> {
     if (!this.auth) throw new Error('unconfigured');
     await sendPasswordResetEmail(this.auth, email);
+  }
+  async verifyEmail(): Promise<void> {
+    const user = this.auth?.currentUser;
+    if (!user) throw new Error('unconfigured');
+    await sendEmailVerification(user, { url: location.origin + '/profile' });
+  }
+  async refreshUser(): Promise<void> {
+    const user = this.auth?.currentUser;
+    if (!user) return;
+    await reload(user);
+    await user.getIdToken(true);
+    this.user.set(user);
   }
   async logout(): Promise<void> {
     if (this.auth) await signOut(this.auth);

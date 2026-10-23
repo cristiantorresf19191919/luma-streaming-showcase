@@ -2546,3 +2546,235 @@ button.membership-card {
   font-size: 12px;
   line-height: 1.7;
 }
+
+/* Personal screening room: soft borders, generous touch targets, quiet motion. */
+.rental-offer,
+.purchase-card {
+  margin: 28px 0;
+  padding: 28px;
+  border: 1px solid #e5c68c40;
+  border-radius: 24px;
+  background: linear-gradient(120deg, #233631aa, #111c21);
+  max-width: 660px;
+}
+.rental-offer h2,
+.purchase-card h2 {
+  margin: 12px 0;
+  font-family: Georgia, serif;
+  font-size: clamp(28px, 5vw, 42px);
+}
+.rental-offer h2 small {
+  font-size: 16px;
+  font-family: inherit;
+  color: #becdca;
+}
+.rental-offer p,
+.purchase-card p {
+  line-height: 1.7;
+  color: #c2cfcc;
+}
+.rental-offer button {
+  margin-top: 12px;
+}
+.library-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 30px 0;
+}
+.library-tabs .chip {
+  min-height: 48px;
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+.library-empty {
+  padding: 60px 24px;
+  text-align: center;
+  border: 1px solid #ffffff12;
+  border-radius: 28px;
+  background: radial-gradient(ellipse at top, #263b3744, transparent);
+  margin: 28px 0;
+}
+.library-empty > span {
+  display: block;
+  font: 54px Georgia;
+  color: #e8c589;
+  margin-bottom: 20px;
+}
+.library-empty h2 {
+  font: clamp(26px, 4vw, 38px) Georgia;
+}
+.library-empty p {
+  color: #afc2bf;
+  margin: 20px auto;
+  max-width: 500px;
+  line-height: 1.7;
+}
+.library-rows {
+  display: grid;
+  gap: 20px;
+}
+.library-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+  border: 1px solid #ffffff18;
+  background: #152127;
+  border-radius: 24px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.25s ease;
+}
+.library-row:hover {
+  transform: translateY(-3px);
+}
+.library-row img {
+  width: 100px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.library-row > div {
+  flex: 1;
+}
+.library-row h2 {
+  font: 28px Georgia;
+  margin: 12px 0;
+}
+.library-row p {
+  font-size: 14px;
+  color: #afc2bf;
+}
+.library-row progress {
+  width: 100%;
+  height: 5px;
+  accent-color: #e8c589;
+}
+.library-row > span {
+  color: #e8c589;
+}
+.purchase-card .text-button {
+  display: inline-block;
+  margin: 20px;
+}
+.rental-notice {
+  padding: 18px 22px;
+  border: 1px solid #b2ffdb30;
+  border-radius: 16px;
+  line-height: 1.7;
+  color: #c0d8d1;
+  background: #172c25;
+}
+.rental-notice a {
+  color: inherit;
+}
+.playback-tools {
+  margin-top: 18px;
+}
+.install-nudge {
+  position: fixed;
+  z-index: 35;
+  right: 24px;
+  bottom: 30px;
+  max-width: 430px;
+  padding: 26px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  border: 1px solid #d9e9e130;
+  border-radius: 28px;
+  background: #102125f5;
+  box-shadow: 0 20px 90px #0009;
+  backdrop-filter: blur(20px);
+  animation: nudge-in 0.3s ease-out;
+}
+.install-nudge img {
+  border-radius: 12px;
+}
+.install-nudge h2 {
+  font: 25px Georgia;
+  margin: 12px 0;
+}
+.install-nudge p,
+.install-nudge li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #c0ceca;
+}
+.install-nudge ol {
+  padding-left: 20px;
+}
+.install-nudge .button {
+  min-height: 48px;
+  font-size: 14px;
+}
+.nudge-close {
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 0;
+  color: #b7c9c6;
+  font-size: 26px;
+  cursor: pointer;
+}
+.analytics-choice {
+  padding: 16px 24px;
+  text-align: center;
+  color: #afc2bf;
+  font-size: 13px;
+}
+.analytics-choice input {
+  margin-right: 10px;
+  min-width: 20px;
+  min-height: 20px;
+  vertical-align: middle;
+}
+@keyframes nudge-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 680px) {
+  .install-nudge {
+    left: 12px;
+    right: 12px;
+    bottom: 90px;
+    max-width: none;
+    padding: 24px 20px;
+  }
+  .library-row {
+    gap: 14px;
+    padding: 14px;
+  }
+  .library-row img {
+    width: 75px;
+    height: 112px;
+  }
+  .library-row h2 {
+    font-size: 22px;
+  }
+  .rental-offer,
+  .purchase-card {
+    padding: 22px;
+  }
+  .library-tabs .chip {
+    font-size: 13px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .install-nudge {
+    animation: none;
+  }
+  .library-row {
+    transition: none;
+  }
+}

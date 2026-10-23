@@ -5,12 +5,17 @@ import {
   effect,
   inject,
   signal,
+  viewChild,
+  ElementRef,
+  OnDestroy,
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FILMS, filmDescription, filmTitle, filmTrailer, poster } from '../core/catalog';
 import { I18nService } from '../core/i18n.service';
+import { ViewingStore } from '../core/viewing.store';
+import { AnalyticsService } from '../core/analytics.service';
 import { Icon } from '../shared/icon';
 @Component({
   selector: 'luma-player',
@@ -30,16 +35,56 @@ import { Icon } from '../shared/icon';
               <video
                 #video
                 controls
-                autoplay
                 playsinline
-                preload="auto"
+                preload="metadata"
                 [attr.poster]="posterOf(film)"
                 [src]="trailerOf(film)"
                 (error)="failed.set(true)"
-                (loadeddata)="startPlayback(video)"
-                (canplay)="startPlayback(video)"
-              ></video>
+                (loadedmetadata)="prepare(video)"
+                (timeupdate)="saveProgress(video)"
+                (pause)="saveProgress(video, true)"
+                (ended)="saveProgress(video, true)"
+                (play)="trackPlay()"
+              >
+                @if (film.id === 'dune') {
+                  <track
+                    kind="captions"
+                    src="/media/preview.vtt"
+                    srclang="en"
+                    label="English · sample clip"
+                  />
+                }
+              </video>
             </div>
+            <div class="actions playback-tools">
+              <button class="button glass" type="button" (click)="fullscreen(video)">
+                {{ i18n.lang() === 'en' ? 'Full screen' : 'Pantalla completa' }}
+              </button>
+              @if (resume() > 2) {
+                <button
+                  class="button glass"
+                  type="button"
+                  (click)="video.currentTime = 0; resume.set(0)"
+                >
+                  {{ i18n.lang() === 'en' ? 'Start over' : 'Desde el inicio' }}
+                </button>
+              }
+            </div>
+            <p class="muted" role="status">
+              {{
+                !viewing.ready()
+                  ? i18n.lang() === 'en'
+                    ? 'Loading your saved place…'
+                    : 'Cargando tu progreso…'
+                  : viewing.error()
+                    ? i18n.lang() === 'en'
+                      ? 'Progress sync unavailable. Keep this page open and retry your connection.'
+                      : 'No se pudo sincronizar el progreso. Revisa tu conexión.'
+                    : i18n.lang() === 'en'
+                      ? 'Your place is saved as you watch.'
+                      : 'Guardamos tu progreso mientras miras.'
+              }}
+            </p>
             @if (failed()) {
               <p role="alert">
                 {{ i18n.t('player.error') }}
@@ -128,7 +173,15 @@ import { Icon } from '../shared/icon';
     }
   `,
 })
-export class Player {
+export class Player implements OnDestroy {
+  readonly viewing = inject(ViewingStore);
+  readonly analytics = inject(AnalyticsService);
+  readonly videoRef = viewChild<ElementRef<HTMLVideoElement>>('video');
+  readonly resume = signal(0);
+  private prepared = '';
+  private lastSaved = 0;
+  private tracked = '';
+  private owner: string | null = null;
   private readonly route = inject(ActivatedRoute);
   readonly i18n = inject(I18nService);
   readonly params = toSignal(this.route.paramMap);
@@ -153,20 +206,60 @@ export class Player {
       this.title.setTitle(`Watch ${name} — movie`);
       this.failed.set(false);
     });
+    effect(() => {
+      const ready = this.viewing.ready();
+      const uid = this.viewing.auth.user()?.uid ?? null;
+      const video = this.videoRef()?.nativeElement;
+      if (video && ready) {
+        if (this.owner !== uid) {
+          video.pause();
+          this.prepared = '';
+        }
+        this.owner = uid;
+        this.prepare(video);
+      }
+    });
   }
   titleOf = (film: (typeof FILMS)[number]) => filmTitle(film, this.i18n.lang());
   descriptionOf = (film: (typeof FILMS)[number]) => filmDescription(film, this.i18n.lang());
   trailerOf = (film: (typeof FILMS)[number]) => filmTrailer(film);
   posterOf = (film: (typeof FILMS)[number]) =>
     film.id === 'dune' ? '/images/dune-hero.jpg' : poster(film.id);
-  startPlayback(video: HTMLVideoElement): void {
-    this.failed.set(false);
-    if (!video.paused) return;
-    void video.play().catch(() => {
-      // Algunos navegadores bloquean autoplay con sonido; reintenta en silencio.
-      video.muted = true;
-      void video.play().catch(() => undefined);
-    });
+  prepare(video: HTMLVideoElement): void {
+    const id = this.film()?.id;
+    if (!id || !this.viewing.ready() || !video.duration || this.prepared === id) return;
+    this.owner = this.viewing.auth.user()?.uid ?? null;
+    this.prepared = id;
+    const p = this.viewing.progress()[id + '-trailer'];
+    if (p && p.position < video.duration - Math.min(3, video.duration * 0.1)) {
+      video.currentTime = p.position;
+      this.resume.set(p.position);
+    } else {
+      video.currentTime = 0;
+      this.resume.set(0);
+    }
+  }
+  saveProgress(video: HTMLVideoElement, force = false): void {
+    const id = this.film()?.id;
+    if (!id || this.prepared !== id) return;
+    if (!force && Date.now() - this.lastSaved < 15000) return;
+    this.lastSaved = Date.now();
+    this.viewing.save(id, 'trailer', video.currentTime, video.duration, this.owner);
+  }
+  trackPlay() {
+    if (this.tracked !== this.film()?.id) {
+      this.tracked = this.film()?.id || '';
+      this.analytics.track('trailer_view', this.film()?.id);
+    }
+  }
+  fullscreen(video: HTMLVideoElement) {
+    const ios = video as HTMLVideoElement & { webkitEnterFullscreen?: () => void };
+    if (ios.webkitEnterFullscreen) ios.webkitEnterFullscreen();
+    else void video.requestFullscreen?.().catch(() => {});
+  }
+  ngOnDestroy() {
+    const video = this.videoRef()?.nativeElement;
+    if (video) this.saveProgress(video, true);
   }
   ask(prompt: string): void {
     const film = this.film();

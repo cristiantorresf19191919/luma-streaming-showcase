@@ -51,3 +51,7 @@ playwright-report/
 
 .env.local
 src/environments/firebase.generated.ts
+
+.env.server.local
+netlify/functions/*.zip
+netlify/functions/manifest.json

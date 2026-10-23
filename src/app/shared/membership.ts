@@ -22,8 +22,8 @@ import { I18nService } from '../core/i18n.service';
 export class Membership {
   readonly commerce = inject(CommerceService);
   async checkout() {
-    this.close();
     await this.commerce.checkout('invisibles');
+    if (!this.commerce.error() && !this.commerce.busy()) this.close();
   }
   private readonly analytics = inject(AnalyticsService);
   readonly membership = inject(MembershipService);

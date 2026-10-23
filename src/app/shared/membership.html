@@ -127,6 +127,9 @@
           </p>
         </div>
       }
+      @if (commerce.error()) {
+        <p class="lead-error" role="alert">{{ commerce.error() }}</p>
+      }
       <details class="plan-terms">
         <summary>
           {{

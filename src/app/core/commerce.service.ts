@@ -32,6 +32,7 @@ export class CommerceService {
     return data;
   }
   async checkout(filmId: string): Promise<void> {
+    this.error.set('');
     if (!this.auth.user()) {
       await this.router.navigate(['/profile'], { queryParams: { returnTo: '/title/' + filmId } });
       return;

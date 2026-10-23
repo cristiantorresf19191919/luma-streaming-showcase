@@ -150,3 +150,5 @@ E2E_LIVE_AUTH=1 npm test -- tests/progress-live.spec.ts --project=desktop --work
 ```
 
 The live test creates and deletes disposable accounts, verifies two-session progress updates, and checks that another user cannot read/write progress or forge purchases. Run Playwright suites sequentially to avoid shared artifact-directory collisions. Real payment/email/video acceptance remains pending external credentials and assets. For production PWA checks, set `E2E_PWA=1` and `PLAYWRIGHT_BASE_URL` to the exact deploy URL.
+
+Runtime configuration: production uses `AWS_LAMBDA_JS_RUNTIME=nodejs24.x` and `NODE_OPTIONS=--experimental-require-module` in Netlify environment settings. The Firebase Admin 14 dependency loads an ES module from CommonJS; Lambda disables this interoperability by default. Keep these settings on redeploy, and verify the deployed commerce-status endpoint returns JSON rather than a runtime error.

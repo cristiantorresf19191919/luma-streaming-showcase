@@ -70,23 +70,22 @@ export class InstallPrompt implements OnDestroy {
   readonly visible = signal(false);
   readonly help = signal(false);
   private event?: InstallEvent;
-  private visits = 0;
+  private visits = new Set([location.pathname]);
   private i18n = inject(I18nService);
   private analytics = inject(AnalyticsService);
   private router = inject(Router);
   private timer = setTimeout(() => {
-    if (this.visits >= 2) this.show();
+    this.elapsed = true;
+    if (this.visits.size >= 2) this.show();
   }, 45000);
   private elapsed = false;
-  private elapsedTimer = setTimeout(() => {
-    this.elapsed = true;
-  }, 44000);
+
   private subscription = this.router.events.subscribe((e) => {
     if (e instanceof NavigationEnd) {
-      this.visits++;
+      this.visits.add(e.urlAfterRedirects.split('?')[0].split('#')[0]);
       if (e.urlAfterRedirects.startsWith('/watch') || e.urlAfterRedirects.startsWith('/rental'))
         this.visible.set(false);
-      if (this.elapsed && this.visits >= 2) this.show();
+      if (this.elapsed && this.visits.size >= 2) this.show();
     }
   });
   private capture = (e: Event) => {
@@ -136,7 +135,6 @@ export class InstallPrompt implements OnDestroy {
   }
   ngOnDestroy() {
     clearTimeout(this.timer);
-    clearTimeout(this.elapsedTimer);
     this.subscription.unsubscribe();
     window.removeEventListener('beforeinstallprompt', this.capture);
     window.removeEventListener('appinstalled', this.installed);

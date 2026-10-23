@@ -69,6 +69,7 @@ test('install nudge waits for exploration and offers iPhone instructions', async
   await page.goto('/');
   await expect(page.locator('.install-nudge')).toHaveCount(0);
   await page.locator('nav a[href="/movies"]').filter({ visible: true }).click();
+  await expect(page).toHaveURL(/\/movies$/);
   await page.clock.fastForward(46000);
   await expect(page.locator('.install-nudge')).toBeVisible();
   await page

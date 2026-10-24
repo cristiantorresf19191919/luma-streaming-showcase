@@ -2626,8 +2626,10 @@ button.membership-card {
   text-decoration: none;
   transition: transform 0.25s ease;
 }
-.library-row:hover {
-  transform: translateY(-3px);
+@media (hover: hover) and (pointer: fine) {
+  .library-row:hover {
+    transform: translateY(-3px);
+  }
 }
 .library-row img {
   width: 100px;
@@ -2945,5 +2947,73 @@ button.membership-card {
   }
   .install-nudge .nudge-close {
     grid-column: 3;
+  }
+}
+
+/* Quiet cinematic motion: keep navigation immediate and controls anchored. */
+@keyframes screening-reveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 9px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes screen-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  app-root:not(.keyboard-navigation) .personal-library > h1,
+  app-root:not(.keyboard-navigation) .player-heading,
+  app-root:not(.keyboard-navigation) .player-title,
+  app-root:not(.keyboard-navigation) .library-empty,
+  app-root:not(.keyboard-navigation) .library-row,
+  app-root:not(.keyboard-navigation) .purchase-card,
+  app-root:not(.keyboard-navigation) .install-help {
+    animation: screening-reveal 280ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  app-root:not(.keyboard-navigation) .library-row:nth-child(2),
+  app-root:not(.keyboard-navigation) .purchase-card:nth-child(2) {
+    animation-delay: 35ms;
+  }
+  app-root:not(.keyboard-navigation) .library-row:nth-child(n + 3),
+  app-root:not(.keyboard-navigation) .purchase-card:nth-child(n + 3) {
+    animation-delay: 70ms;
+  }
+  app-root:not(.keyboard-navigation) .video-wrap {
+    animation: screen-reveal 280ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  app-root:not(.keyboard-navigation) .library-tabs .chip,
+  app-root:not(.keyboard-navigation) .playback-tools .button,
+  app-root:not(.keyboard-navigation) .install-nudge button {
+    transition:
+      transform 200ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+  app-root:not(.keyboard-navigation) .library-tabs .chip:active,
+  app-root:not(.keyboard-navigation) .playback-tools .button:active,
+  app-root:not(.keyboard-navigation) .install-nudge button:active {
+    transform: scale(0.97);
+  }
+}
+.keyboard-navigation .personal-library *,
+.keyboard-navigation .player-page *,
+.keyboard-navigation .install-nudge * {
+  animation: none !important;
+  transition: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .library-row:hover {
+    transform: none;
   }
 }

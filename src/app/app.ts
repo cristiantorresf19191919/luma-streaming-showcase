@@ -12,9 +12,15 @@ import { LibraryStore } from './core/library.store';
   selector: 'app-root',
   imports: [RouterOutlet, RouterLink, RouterLinkActive, Icon, Membership, InstallPrompt],
   templateUrl: './app.html',
+  host: { '[class.keyboard-navigation]': 'keyboardNavigation()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
+  readonly keyboardNavigation = signal(false);
+  @HostListener('document:pointerdown')
+  onPointer(): void {
+    this.keyboardNavigation.set(false);
+  }
   readonly analytics = inject(AnalyticsService);
   readonly installHelp = signal(false);
   readonly membership = inject(MembershipService);
@@ -24,6 +30,7 @@ export class App {
   private readonly router = inject(Router);
   @HostListener('document:keydown', ['$event'])
   onShortcut(event: KeyboardEvent): void {
+    this.keyboardNavigation.set(true);
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
       event.preventDefault();
       void this.router.navigate(['/search']);

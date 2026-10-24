@@ -9,7 +9,7 @@ type InstallEvent = Event & {
 @Component({
   selector: 'luma-install-prompt',
   template: ` @if (visible()) {
-    <aside class="install-nudge" aria-label="Install movie">
+    <aside class="install-nudge" [class.show-help]="help()" aria-label="Install movie">
       <button
         class="nudge-close"
         (click)="dismiss()"
@@ -23,44 +23,57 @@ type InstallEvent = Event & {
         }}</span>
         <h2>{{ text('Make yourself at home.', 'Hazla parte de tu día.') }}</h2>
         <p>{{ text('Keep movie on your Home Screen.', 'Lleva movie a tu pantalla de inicio.') }}</p>
-        <button class="button primary" (click)="install()">
-          {{ text('Add to Home Screen', 'Añadir a pantalla de inicio') }}
+        <button
+          class="button primary install-action"
+          (click)="install()"
+          [attr.aria-expanded]="help()"
+          [attr.aria-label]="text('Add to Home Screen', 'Añadir a pantalla de inicio')"
+        >
+          <span class="install-long">{{
+            text('Add to Home Screen', 'Añadir a pantalla de inicio')
+          }}</span
+          ><span class="install-short">{{ text('Install', 'Instalar') }}</span>
         </button>
         @if (help()) {
-          <ol>
-            <li>
+          <div class="install-help">
+            <button class="text-button" (click)="help.set(false)">
+              {{ text('Hide instructions', 'Ocultar instrucciones') }}
+            </button>
+            <ol>
+              <li>
+                {{
+                  text(
+                    'Open this website in Safari on iPhone.',
+                    'Abre esta web en Safari en tu iPhone.'
+                  )
+                }}
+              </li>
+              <li>
+                {{
+                  text(
+                    'Tap Share, then Add to Home Screen.',
+                    'Toca Compartir y Añadir a pantalla de inicio.'
+                  )
+                }}
+              </li>
+              <li>
+                {{
+                  text(
+                    'Enable Open as Web App and tap Add.',
+                    'Activa Abrir como app web y toca Añadir.'
+                  )
+                }}
+              </li>
+            </ol>
+            <p class="muted">
               {{
                 text(
-                  'Open this website in Safari on iPhone.',
-                  'Abre esta web en Safari en tu iPhone.'
+                  'Other browsers: choose Install app from the browser menu. Videos and sync need a connection.',
+                  'Otros navegadores: elige Instalar aplicación en el menú. Vídeos y sincronización requieren conexión.'
                 )
               }}
-            </li>
-            <li>
-              {{
-                text(
-                  'Tap Share, then Add to Home Screen.',
-                  'Toca Compartir y Añadir a pantalla de inicio.'
-                )
-              }}
-            </li>
-            <li>
-              {{
-                text(
-                  'Enable Open as Web App and tap Add.',
-                  'Activa Abrir como app web y toca Añadir.'
-                )
-              }}
-            </li>
-          </ol>
-          <p class="muted">
-            {{
-              text(
-                'Other browsers: choose Install app from the browser menu. Videos and sync need a connection.',
-                'Otros navegadores: elige Instalar aplicación en el menú. Vídeos y sincronización requieren conexión.'
-              )
-            }}
-          </p>
+            </p>
+          </div>
         }
       </div>
     </aside>

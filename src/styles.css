@@ -2778,3 +2778,172 @@ button.membership-card {
     transition: none;
   }
 }
+
+/* Compact install card and resilient layouts for narrow embedded previews. */
+.install-short {
+  display: none;
+}
+.install-nudge > div {
+  min-width: 0;
+}
+.install-help {
+  max-height: min(280px, 32dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.library-row > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.library-row img {
+  flex-shrink: 0;
+}
+.library-row progress {
+  display: block;
+  min-width: 0;
+}
+@media (max-width: 680px) {
+  .site-header {
+    gap: 12px;
+  }
+  .header-actions {
+    gap: 8px;
+  }
+  .personal-library {
+    padding-top: 110px;
+  }
+  .library-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin: 22px 0;
+  }
+  .library-tabs .chip {
+    padding: 8px 6px;
+    white-space: normal;
+    line-height: 1.35;
+    min-width: 0;
+  }
+  .library-empty {
+    padding: 30px 18px;
+  }
+  .library-row {
+    gap: 10px;
+    padding: 12px;
+  }
+  .library-row img {
+    width: 56px;
+    height: 84px;
+  }
+  .library-row h2 {
+    font-size: 21px;
+  }
+  .library-row p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .install-nudge {
+    left: 10px;
+    right: 10px;
+    bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+    padding: 12px;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr) auto 32px;
+    gap: 8px;
+    align-items: center;
+  }
+  .install-nudge > div {
+    display: contents;
+  }
+  .install-nudge > img {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .install-nudge .section-kicker,
+  .install-nudge > div > p {
+    display: none;
+  }
+  .install-nudge h2 {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 16px;
+    line-height: 1.2;
+    margin: 0;
+  }
+  .install-nudge .install-action {
+    grid-column: 3;
+    grid-row: 1;
+    font-size: 12px;
+    padding: 0 10px;
+    min-height: 44px;
+    border-radius: 12px;
+  }
+  .install-long {
+    display: none;
+  }
+  .install-short {
+    display: inline;
+  }
+  .install-nudge .nudge-close {
+    position: static;
+    grid-column: 4;
+    grid-row: 1;
+    width: 40px;
+    height: 44px;
+    margin-left: -4px;
+  }
+  .install-help {
+    grid-column: 1 / -1;
+    max-height: 28dvh;
+    border-top: 1px solid #ffffff18;
+    padding-top: 8px;
+  }
+  .install-help p,
+  .install-help li {
+    font-size: 13px;
+  }
+  .install-help .text-button {
+    min-height: 44px;
+  }
+}
+@media (max-width: 359px) {
+  .site-header {
+    padding-inline: 16px;
+    gap: 8px;
+  }
+  .site-header .brand {
+    gap: 6px;
+  }
+  .site-header .brand-word {
+    font-size: 24px;
+  }
+  .site-header .brand-mark {
+    width: 28px;
+    height: 28px;
+  }
+  .header-actions .search-link {
+    display: none;
+  }
+  .library-row > span {
+    display: none;
+  }
+  .install-nudge {
+    grid-template-columns: minmax(0, 1fr) auto 32px;
+  }
+  .install-nudge > img {
+    display: none;
+  }
+  .install-nudge h2 {
+    grid-column: 1;
+  }
+  .install-nudge .install-action {
+    grid-column: 2;
+  }
+  .install-nudge .nudge-close {
+    grid-column: 3;
+  }
+}
